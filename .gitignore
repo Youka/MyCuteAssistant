@@ -1,0 +1,7 @@
+# Output files
+.obj/
+bin/
+
+# Code::Block project files
+*.depend
+*.layout

@@ -1,0 +1,25 @@
+# Auto detect text files and perform LF normalization
+*		text eol=lf
+
+# Git files
+.gitattributes	text
+.gitignore	text
+.gitmodules	text
+
+# Documentations
+*.md		text
+*.txt		text
+
+# Images
+*.ico		binary
+*.png		binary
+
+# Source code
+*.hpp		diff=cpp
+*.cpp		diff=cpp
+*.h		diff=c
+*.c		diff=c
+*.rc		diff=c
+
+# Project files
+.cbp		diff=xml
