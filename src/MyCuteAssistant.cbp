@@ -16,11 +16,27 @@
 				<Compiler>
 					<Add option="-pg" />
 					<Add option="-g" />
+					<Add option="-DWIN32" />
 					<Add option="-DDEBUG" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg -lgmon" />
 					<Add option="-static" />
+					<Add library="qwindowsd" />
+					<Add library="Qt5PlatformSupportd" />
+					<Add library="Qt5Widgetsd" />
+					<Add library="Qt5Guid" />
+					<Add library="Qt5Cored" />
+					<Add library="Ws2_32" />
+					<Add library="oleaut32" />
+					<Add library="ole32" />
+					<Add library="uuid" />
+					<Add library="winmm" />
+					<Add library="imm32" />
+					<Add library="opengl32" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/lib" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/plugins/platforms" />
 				</Linker>
 			</Target>
 			<Target title="Release - Windows">
@@ -31,10 +47,26 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O3" />
+					<Add option="-DWIN32" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-static" />
+					<Add library="qwindows" />
+					<Add library="Qt5PlatformSupport" />
+					<Add library="Qt5Widgets" />
+					<Add library="Qt5Gui" />
+					<Add library="Qt5Core" />
+					<Add library="Ws2_32" />
+					<Add library="oleaut32" />
+					<Add library="ole32" />
+					<Add library="uuid" />
+					<Add library="winmm" />
+					<Add library="imm32" />
+					<Add library="opengl32" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/lib" />
+					<Add directory="E:/PROJEKTE/Libraries/qt5/qt-everywhere-opensource-src-5.3.2/build/plugins/platforms" />
 				</Linker>
 			</Target>
 			<Target title="Debug - Unix">
@@ -46,6 +78,7 @@
 				<Compiler>
 					<Add option="-pg" />
 					<Add option="-g" />
+					<Add option="-D__unix__" />
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
@@ -60,6 +93,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O3" />
+					<Add option="-D__unix__" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -68,8 +102,6 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wredundant-decls" />
-			<Add option="-Wfloat-equal" />
-			<Add option="-Winline" />
 			<Add option="-Wunreachable-code" />
 			<Add option="-Wmissing-include-dirs" />
 			<Add option="-Wswitch-enum" />

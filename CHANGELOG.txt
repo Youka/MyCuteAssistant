@@ -1,5 +1,4 @@
 TODO
 #####
-- link static
 - add icon
-- add targets (release: optimizations; debug: profile & debug symbols)
+- add build system
