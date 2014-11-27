@@ -9,6 +9,9 @@
 # Documentations
 *.md		text
 *.txt		text
+*.html		diff=html
+*.css		diff=css
+*.js		diff=js
 
 # Images
 *.ico		binary
@@ -22,4 +25,4 @@
 *.rc		diff=c
 
 # Project files
-.cbp		diff=xml
+CMakeFiles.txt	diff=cmake

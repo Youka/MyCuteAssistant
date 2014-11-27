@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: version.h
+File: config.h.in
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,9 +13,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#define APP_NAME "MyCuteAssistant"
-#define APP_AUTHOR "Youka"
-#define APP_VERSION_MAJOR 0
-#define APP_VERSION_MINOR 0
-#define APP_VERSION_PATCH 1
+#define APP_NAME "@PROJECT_NAME@"
+#define APP_AUTHOR "@PROJECT_AUTHOR@"
+#define APP_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define APP_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define APP_VERSION_PATCH @PROJECT_VERSION_PATCH@
 #define APP_VERSION_STRING "" #APP_VERSION_MAJOR "." #APP_VERSION_MINOR "." #APP_VERSION_PATCH

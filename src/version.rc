@@ -14,7 +14,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include <winresrc.h>
-#include "version.h"
+#include "config.h"
 
 #define APP_VERSION_NUMBER APP_VERSION_MAJOR,APP_VERSION_MINOR,APP_VERSION_PATCH,0
 

@@ -14,7 +14,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 // Qt for windows needs an integration plugin
-#ifdef WIN32
+#ifdef _WIN32
 #include <QtCore/QPlugin.h>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
