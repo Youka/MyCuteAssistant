@@ -24,6 +24,6 @@
 *.c		diff=c
 *.rc		diff=c
 
-# Project files
+# CMake files
 CMakeFiles.txt	diff=cmake
 *.cmake		diff=cmake

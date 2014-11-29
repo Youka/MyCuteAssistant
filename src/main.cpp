@@ -13,22 +13,34 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-// Qt for windows needs an integration plugin
+#include <QtWidgets/QApplication.h>
+#include <QtWidgets/QLabel.h>
+#include <QtWidgets/QSystemTrayIcon.h>
+#include "config.h"
+
+// Windows expects a static Qt5, so have to link the platform plugin in source
 #ifdef _WIN32
 #include <QtCore/QPlugin.h>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
 
-#include <QtWidgets/QApplication.h>
-#include <QtWidgets/QLabel.h>
+// External image data
+extern "C" const unsigned char logo_png[];
+extern "C" const unsigned logo_png_size;
 
 // Program entry
 int main(int argc, char** argv){
 	// Create global Qt application instance
 	QApplication app(argc, argv);
-	// Create test window
+	// Create & show test window
 	QLabel* label = new QLabel("Hello world!");
 	label->show();
+	// Create & show system tray icon
+	QIcon icon(QPixmap::fromImage(QImage::fromData(logo_png, logo_png_size)));
+	QSystemTrayIcon* tray = new QSystemTrayIcon(icon, label);
+	tray->setToolTip(APP_NAME " v" APP_VERSION_STRING);
+	tray->show();
+	QObject::connect(&app, SIGNAL(aboutToQuit()), tray, SLOT(hide()));
 	// Run Qt application & return his status code to this program
 	return app.exec();
 }
