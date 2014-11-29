@@ -3,13 +3,13 @@ function(create_resources dir output)
 	# Create empty output file
 	file(WRITE ${output} "")
 	# Collect input files
-	file(GLOB bins ${dir}/*.*)
+	file(GLOB bins ${dir}/*)
 	# Iterate through input files
 	foreach(bin ${bins})
 		# Get short filename
 		string(REGEX MATCH "([^/]+)$" filename ${bin})
-		# Replace filename extension separator for C compatibility
-		string(REPLACE "." "_" filename ${filename})
+		# Replace filename spaces & extension separator for C compatibility
+		string(REGEX REPLACE "\\.| " "_" filename ${filename})
 		# Read hex data from file
 		file(READ ${bin} filedata HEX)
 		# Convert hex data for C compatibility
