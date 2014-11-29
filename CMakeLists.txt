@@ -18,10 +18,11 @@ message(STATUS "Generator: ${CMAKE_GENERATOR}")
 
 # Request user choices
 if(MINGW)
-	option(BUILD_STD_STATIC "Link standard libraries statically?" ON)
+	set(BUILD_STD_STATIC_VALUE ON)
 else()
-	option(BUILD_STD_STATIC "Link standard libraries statically?" OFF)
+	set(BUILD_STD_STATIC_VALUE OFF)
 endif()
+option(BUILD_STD_STATIC "Link standard libraries statically?" ${BUILD_STD_STATIC_VALUE})
 set(BUILD_QT5_DIR "" CACHE PATH "Qt5 framework directory")
 set(BUILD_INSTALL_DIR bin CACHE PATH "Install directory")
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -83,7 +84,7 @@ set(PROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 message(STATUS "Project source directory: ${PROJECT_SOURCE_DIR}")
 
 # Set additional search directories for compilation
-include_directories(${PROJECT_BINARY_DIR} ${BUILD_QT5_DIR}/include)	# Find configuration file + Qt5 library headers
+include_directories(${PROJECT_SOURCE_DIR}/res ${PROJECT_BINARY_DIR} ${BUILD_QT5_DIR}/include)	# Configuration & windows resources & qt5
 get_directory_property(NEW_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
 message(STATUS "Additional include directories: ${NEW_INCLUDE_DIRECTORIES}")
 
@@ -99,12 +100,13 @@ configure_file(
 )
 message(STATUS "Configuration header file: ${PROJECT_BINARY_DIR}/config.h")
 
+# Convert binary to C data
+include(cmake/resources.cmake)
+create_resources(${PROJECT_SOURCE_DIR}/res ${PROJECT_BINARY_DIR}/resources.c)
+message(STATUS "Converted resources to C")
+
 # Compilation sources & destination
-if(WIN32)
-	file(GLOB SOURCES src/*.cpp src/*.c src/*.rc)
-else()
-	file(GLOB SOURCES src/*.cpp src/*.c)
-endif()
+file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/*.cpp ${PROJECT_SOURCE_DIR}/*.c ${PROJECT_BINARY_DIR}/*.c ${PROJECT_SOURCE_DIR}/*.rc)
 add_executable(${PROJECT_NAME} ${SOURCES})
 message(STATUS "Executable with following sources: ${SOURCES}")
 

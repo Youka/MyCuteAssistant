@@ -26,3 +26,4 @@
 
 # Project files
 CMakeFiles.txt	diff=cmake
+*.cmake		diff=cmake
