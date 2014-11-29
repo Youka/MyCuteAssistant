@@ -15,6 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #define APP_NAME "@PROJECT_NAME@"
 #define APP_AUTHOR "@PROJECT_AUTHOR@"
+#define APP_DESCRIPTION "@PROJECT_DESCRIPTION@"
 #define APP_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
 #define APP_VERSION_MINOR @PROJECT_VERSION_MINOR@
 #define APP_VERSION_PATCH @PROJECT_VERSION_PATCH@

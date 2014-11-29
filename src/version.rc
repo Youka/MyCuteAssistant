@@ -31,7 +31,7 @@ BEGIN
 	BEGIN
 		BLOCK "040904E4"	// Language as hex code: EN-US
 		BEGIN
-			VALUE "FileDescription", APP_NAME
+			VALUE "FileDescription", APP_DESCRIPTION
 			VALUE "CompanyName", APP_AUTHOR
 			VALUE "FileVersion", APP_VERSION_STRING
 			VALUE "InternalName", APP_NAME
