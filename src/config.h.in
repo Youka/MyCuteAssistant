@@ -13,10 +13,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
+#define STR_BRIDGE(x) #x
+#define STR(x) STR_BRIDGE(x)
+
 #define APP_NAME "@PROJECT_NAME@"
 #define APP_AUTHOR "@PROJECT_AUTHOR@"
 #define APP_DESCRIPTION "@PROJECT_DESCRIPTION@"
 #define APP_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
 #define APP_VERSION_MINOR @PROJECT_VERSION_MINOR@
 #define APP_VERSION_PATCH @PROJECT_VERSION_PATCH@
-#define APP_VERSION_STRING "" #APP_VERSION_MAJOR "." #APP_VERSION_MINOR "." #APP_VERSION_PATCH
+#define APP_VERSION_STRING STR(APP_VERSION_MAJOR) "." STR(APP_VERSION_MINOR) "." STR(APP_VERSION_PATCH)
