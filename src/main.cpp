@@ -16,10 +16,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QApplication.h>
 #include "AvatarWindow.hpp"
 
-// Windows expects a static Qt5, so have to link the platform plugin in source
+// Windows expects a static Qt5, so have to link plugins in source
 #ifdef _WIN32
 #include <QtCore/QPlugin.h>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
+Q_IMPORT_PLUGIN(QICOPlugin)
 #endif
 
 // Program entry

@@ -90,7 +90,7 @@ get_directory_property(NEW_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
 message(STATUS "Additional include directories: ${NEW_INCLUDE_DIRECTORIES}")
 
 # Set additional search directories for linkage
-link_directories(${BUILD_QT5_DIR}/lib ${BUILD_QT5_DIR}/plugins/platforms)
+link_directories(${BUILD_QT5_DIR}/lib ${BUILD_QT5_DIR}/plugins/platforms ${BUILD_QT5_DIR}/plugins/imageformats)
 get_directory_property(NEW_LINK_DIRECTORIES LINK_DIRECTORIES)
 message(STATUS "Additional link directories: ${NEW_LINK_DIRECTORIES}")
 
@@ -114,6 +114,7 @@ message(STATUS "Executable with following sources: ${SOURCES}")
 # Add link targets (=libraries)
 if(WIN32)
 	target_link_libraries(${PROJECT_NAME}
+		qico
 		qwindows
 		Qt5PlatformSupport
 		Qt5Widgets

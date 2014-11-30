@@ -19,12 +19,12 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "config.h"
 
 // External image data
-extern "C" const unsigned char logo_png[];
-extern "C" const unsigned logo_png_size;
+extern "C" const unsigned char logo_ico[];
+extern "C" const unsigned logo_ico_size;
 
 AvatarWindow::AvatarWindow(QWidget* parent) : QWidget(parent){
 	// Create icon out of external image
-	QIcon icon(QPixmap::fromImage(QImage::fromData(logo_png, logo_png_size)));
+	QIcon icon(QPixmap::fromImage(QImage::fromData(logo_ico, logo_ico_size)));
 	// Set window properties
 	this->setWindowIcon(icon);
 	// Create & show system tray icon
