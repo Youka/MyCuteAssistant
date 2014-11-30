@@ -16,16 +16,24 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "TrayIcon.hpp"
 #include <QtWidgets/QWidget.h>
 #include "config.h"
+#include <QtWidgets/QMenu.h>
 
-// External image data
-extern "C" const unsigned char logo_ico[];
-extern "C" const unsigned logo_ico_size;
+// External image access
+#define IMPORT_RESOURCE_IMAGE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
+IMPORT_RESOURCE_IMAGE(logo_ico)
+IMPORT_RESOURCE_IMAGE(bye_png)
+IMPORT_RESOURCE_IMAGE(lone_png)
+#define QICON(image) QIcon(QPixmap::fromImage(QImage::fromData(image, image##_size)))
 
-TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QIcon(QPixmap::fromImage(QImage::fromData(logo_ico, logo_ico_size))), parent){
+TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent){
 	// Set tray icon properties
 	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
-	// Close parent on tray activation
-	QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason){
-		parent->close();
-	});
+	// Set tray icon action
+	QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason){if(reason == QSystemTrayIcon::ActivationReason::DoubleClick) parent->activateWindow();});
+	// Add tray icon menu
+	QMenu* tray_menu = new QMenu(parent);
+	tray_menu->addAction(QICON(lone_png), "*lone*", parent, SLOT(raise()));
+	tray_menu->addSeparator();
+	tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
+	this->setContextMenu(tray_menu);
 }
