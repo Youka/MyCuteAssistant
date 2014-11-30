@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: main.cpp
+File: AvatarWindow.cpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,21 +13,24 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#include <QtWidgets/QApplication.h>
 #include "AvatarWindow.hpp"
+#include <QtWidgets/QSystemTrayIcon.h>
+#include <QtCore/QCoreApplication.h>
+#include "config.h"
 
-// Windows expects a static Qt5, so have to link the platform plugin in source
-#ifdef _WIN32
-#include <QtCore/QPlugin.h>
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
-#endif
+// External image data
+extern "C" const unsigned char logo_png[];
+extern "C" const unsigned logo_png_size;
 
-// Program entry
-int main(int argc, char** argv){
-	// Create global Qt application instance
-	QApplication app(argc, argv);
-	// Create & show main window
-	(new AvatarWindow())->show();
-	// Run Qt application & return his status code to this program
-	return app.exec();
+AvatarWindow::AvatarWindow(QWidget* parent) : QWidget(parent){
+	// Create icon out of external image
+	QIcon icon(QPixmap::fromImage(QImage::fromData(logo_png, logo_png_size)));
+	// Set window properties
+	this->setWindowIcon(icon);
+	// Create & show system tray icon
+	QSystemTrayIcon* tray = new QSystemTrayIcon(icon, this);
+	tray->setToolTip(APP_NAME " v" APP_VERSION_STRING);
+	tray->show();
+	tray->connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(hide()));
+	QObject::connect(tray, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason){this->close();});
 }

@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: main.cpp
+File: AvatarWindow.hpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,21 +13,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#include <QtWidgets/QApplication.h>
-#include "AvatarWindow.hpp"
+#include <QtWidgets/QWidget.h>
 
-// Windows expects a static Qt5, so have to link the platform plugin in source
-#ifdef _WIN32
-#include <QtCore/QPlugin.h>
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
-#endif
-
-// Program entry
-int main(int argc, char** argv){
-	// Create global Qt application instance
-	QApplication app(argc, argv);
-	// Create & show main window
-	(new AvatarWindow())->show();
-	// Run Qt application & return his status code to this program
-	return app.exec();
-}
+class AvatarWindow : public QWidget{
+	public:
+		AvatarWindow(QWidget* parent = nullptr);
+};
