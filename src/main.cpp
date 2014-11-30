@@ -15,6 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QApplication.h>
 #include "AvatarWindow.hpp"
+#include "TrayIcon.hpp"
 
 // Windows expects a static Qt5, so have to link plugins in source
 #ifdef _WIN32
@@ -27,8 +28,10 @@ Q_IMPORT_PLUGIN(QICOPlugin)
 int main(int argc, char** argv){
 	// Create global Qt application instance
 	QApplication app(argc, argv);
-	// Create & show main window
-	(new AvatarWindow())->show();
+	// Create & show main windows
+	AvatarWindow* main_window = new AvatarWindow();
+	main_window->show();
+	(new TrayIcon(main_window))->show();
 	// Run Qt application & return his status code to this program
 	return app.exec();
 }

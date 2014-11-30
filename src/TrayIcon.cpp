@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: AvatarWindow.cpp
+File: TrayIcon.cpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,9 +13,18 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#include "AvatarWindow.hpp"
+#include "TrayIcon.hpp"
+#include <QtWidgets/QWidget.h>
+#include "config.h"
+#include <QtCore/QCoreApplication.h>
 
-AvatarWindow::AvatarWindow(QWidget* parent) : QWidget(parent){
-	// Set window properties
-	//this->setWindowFlags(Qt::ToolTip);
+// External image data
+extern "C" const unsigned char logo_ico[];
+extern "C" const unsigned logo_ico_size;
+
+TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QIcon(QPixmap::fromImage(QImage::fromData(logo_ico, logo_ico_size))), parent){
+	// Set tray icon properties
+	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
+	// Ensure taskicon removement from system tray (correct destruction)
+	this->connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(deleteLater()));
 }

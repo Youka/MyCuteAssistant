@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: AvatarWindow.cpp
+File: TrayIcon.hpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,9 +13,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#include "AvatarWindow.hpp"
+#pragma once
 
-AvatarWindow::AvatarWindow(QWidget* parent) : QWidget(parent){
-	// Set window properties
-	//this->setWindowFlags(Qt::ToolTip);
-}
+#include <QtWidgets/QSystemTrayIcon.h>
+
+class TrayIcon : public QSystemTrayIcon{
+	public:
+		TrayIcon(QWidget* parent = nullptr);
+};

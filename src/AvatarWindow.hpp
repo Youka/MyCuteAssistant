@@ -13,6 +13,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
+#pragma once
+
 #include <QtWidgets/QWidget.h>
 
 class AvatarWindow : public QWidget{
