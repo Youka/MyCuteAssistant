@@ -16,7 +16,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "TrayIcon.hpp"
 #include <QtWidgets/QWidget.h>
 #include "config.h"
-#include <QtCore/QCoreApplication.h>
 
 // External image data
 extern "C" const unsigned char logo_ico[];
@@ -25,6 +24,8 @@ extern "C" const unsigned logo_ico_size;
 TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QIcon(QPixmap::fromImage(QImage::fromData(logo_ico, logo_ico_size))), parent){
 	// Set tray icon properties
 	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
-	// Ensure taskicon removement from system tray (correct destruction)
-	this->connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(deleteLater()));
+	// Close parent on tray activation
+	QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason){
+		parent->close();
+	});
 }

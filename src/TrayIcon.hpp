@@ -19,5 +19,5 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 class TrayIcon : public QSystemTrayIcon{
 	public:
-		TrayIcon(QWidget* parent = nullptr);
+		TrayIcon(QWidget* parent);
 };

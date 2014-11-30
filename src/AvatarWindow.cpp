@@ -15,7 +15,14 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include "AvatarWindow.hpp"
 
-AvatarWindow::AvatarWindow(QWidget* parent) : QWidget(parent){
+AvatarWindow::AvatarWindow(void){
 	// Set window properties
-	//this->setWindowFlags(Qt::ToolTip);
+	this->setWindowFlags(Qt::ToolTip);
+	// Set dummy as this window's placeholder in application top windows
+	this->dummy = new QWidget;
+}
+
+void AvatarWindow::closeEvent(QCloseEvent* event){
+	this->dummy->close();
+	QWidget::closeEvent(event);
 }

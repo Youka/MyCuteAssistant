@@ -18,6 +18,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QWidget.h>
 
 class AvatarWindow : public QWidget{
+	private:
+		QWidget* dummy;
+		void closeEvent(QCloseEvent* event) override;
 	public:
-		AvatarWindow(QWidget* parent = nullptr);
+		AvatarWindow(void);
 };

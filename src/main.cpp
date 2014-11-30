@@ -29,9 +29,10 @@ int main(int argc, char** argv){
 	// Create global Qt application instance
 	QApplication app(argc, argv);
 	// Create & show main windows
-	AvatarWindow* main_window = new AvatarWindow();
-	main_window->show();
-	(new TrayIcon(main_window))->show();
+	AvatarWindow main_window;
+	main_window.show();
+	TrayIcon tray(&main_window);
+	tray.show();
 	// Run Qt application & return his status code to this program
 	return app.exec();
 }
