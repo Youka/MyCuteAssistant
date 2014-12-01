@@ -1,4 +1,9 @@
 TODO
 #####
-- add icon
-- add build system
+General:
+- draw icons
+
+Unix:
+- Qt linkage
+- Speech API
+- Global hotkey
