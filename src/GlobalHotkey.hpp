@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: TrayIcon.hpp
+File: GlobalHotkey.hpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -15,13 +15,16 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtWidgets/QSystemTrayIcon.h>
-#include <memory>
-#include "GlobalHotkey.hpp"
+#include <QtCore/QAbstractNativeEventFilter.h>
+#include <functional>
 
-class TrayIcon : public QSystemTrayIcon{
+class GlobalHotkey{
 	private:
-		std::unique_ptr<GlobalHotkey> hotkey;
+		int id;
+		QAbstractNativeEventFilter* filter;
+		bool ok;
 	public:
-		TrayIcon(QWidget* parent);
+		GlobalHotkey(const char* keys, std::function<void()> receiver);
+		~GlobalHotkey(void);
+		bool isOk() const;
 };

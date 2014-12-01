@@ -17,6 +17,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QWidget.h>
 #include "config.h"
 #include <QtWidgets/QMenu.h>
+#include <QtWidgets/QMessageBox.h>
 
 // External image access
 #define IMPORT_RESOURCE_IMAGE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
@@ -38,14 +39,15 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent){
 	QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason){
 		switch(reason){
 			case QSystemTrayIcon::ActivationReason::DoubleClick:
-				parent->activateWindow();
+				if(parent->isVisible())
+					parent->activateWindow();
 				break;
 			case QSystemTrayIcon::ActivationReason::Context:
 				if(parent->isVisible() && tray_menu_first_item->text() != "*Crouch*"){
 					tray_menu_first_item->setText("*Crouch*");
 					tray_menu_first_item->disconnect(parent);
 					parent->connect(tray_menu_first_item, SIGNAL(triggered()), SLOT(hide()));
-				}else if(!parent->isVisible() && tray_menu_first_item->text() != "*Emerge*"){
+				}else if(parent->isHidden() && tray_menu_first_item->text() != "*Emerge*"){
 					tray_menu_first_item->setText("*Emerge*");
 					tray_menu_first_item->disconnect(parent);
 					parent->connect(tray_menu_first_item, SIGNAL(triggered()), SLOT(show()));
@@ -56,4 +58,13 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent){
 			case QSystemTrayIcon::ActivationReason::MiddleClick: break;
 		}
 	});
+	// Bind hotkey
+	this->hotkey.reset(new GlobalHotkey("CTRL|ALT|Y", [=](){
+		this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);
+	}));
+	if(!this->hotkey->isOk()){
+		QMessageBox msg(QMessageBox::Warning, APP_NAME, "Hotkey couldn't be bound!");
+		msg.setWindowIcon(QICON(logo_ico));
+		msg.exec();
+	}
 }

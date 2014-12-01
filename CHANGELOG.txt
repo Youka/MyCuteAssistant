@@ -2,8 +2,9 @@ TODO
 #####
 General:
 - draw icons
+- add application config file
 
 Unix:
 - Qt linkage
-- Speech API
 - Global hotkey
+- Speech API
