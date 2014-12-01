@@ -26,7 +26,7 @@ IMPORT_RESOURCE_IMAGE(bye_png)
 IMPORT_RESOURCE_IMAGE(show_hide_png)
 #define QICON(image) QIcon(QPixmap::fromImage(QImage::fromData(image, image##_size)))
 
-TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent){
+TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey("CTRL|ALT|Y", [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
 	// Set tray icon properties
 	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
 	// Add tray icon menu
@@ -58,11 +58,8 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent){
 			case QSystemTrayIcon::ActivationReason::MiddleClick: break;
 		}
 	});
-	// Bind hotkey
-	this->hotkey.reset(new GlobalHotkey("CTRL|ALT|Y", [=](){
-		this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);
-	}));
-	if(!this->hotkey->isOk()){
+	// Check hotkey
+	if(!hotkey.isOk()){
 		QMessageBox msg(QMessageBox::Warning, APP_NAME, "Hotkey couldn't be bound!");
 		msg.setWindowIcon(QICON(logo_ico));
 		msg.exec();

@@ -22,7 +22,6 @@ class GlobalHotkey{
 	private:
 		int id;
 		QAbstractNativeEventFilter* filter;
-		bool ok;
 	public:
 		GlobalHotkey(const char* keys, std::function<void()> receiver);
 		~GlobalHotkey(void);

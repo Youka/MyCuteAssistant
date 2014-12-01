@@ -16,12 +16,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 #pragma once
 
 #include <QtWidgets/QSystemTrayIcon.h>
-#include <memory>
 #include "GlobalHotkey.hpp"
 
 class TrayIcon : public QSystemTrayIcon{
 	private:
-		std::unique_ptr<GlobalHotkey> hotkey;
+		GlobalHotkey hotkey;
 	public:
 		TrayIcon(QWidget* parent);
 };

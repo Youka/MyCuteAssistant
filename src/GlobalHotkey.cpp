@@ -18,27 +18,36 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtCore/QStringList.h>
 #include <QtCore/QCoreApplication.h>
 
+class NativeEventFilter : public QAbstractNativeEventFilter{
+	private:
+		std::function<void()> receiver;
+	public:
+		NativeEventFilter(std::function<void()> receiver) : receiver(receiver){}
+		virtual bool isHotkey(void* message) = 0;
+		bool nativeEventFilter(const QByteArray&, void* message, long*) override{
+			if(this->isHotkey(message))
+				this->receiver();
+			return false;
+		}
+};
+
 #ifdef _WIN32
 #include <windows.h>
 
-class WinEventFilter : public QAbstractNativeEventFilter{
+class WinEventFilter : public NativeEventFilter{
 	private:
 		UINT mods, vk;
-		std::function<void()> receiver;
 	public:
-		WinEventFilter(UINT mods, UINT vk, std::function<void()> receiver) : mods(mods), vk(vk), receiver(receiver){}
-		bool nativeEventFilter(const QByteArray&, void* message, long*) override{
+		WinEventFilter(UINT mods, UINT vk, std::function<void()> receiver) : NativeEventFilter(receiver), mods(mods), vk(vk){}
+		bool isHotkey(void* message) override{
 			MSG* msg = reinterpret_cast<MSG*>(message);
-			if(msg->message == WM_HOTKEY && (msg->lParam & static_cast<UINT>(0xffff)) == this->mods && (msg->lParam >> 16 & static_cast<UINT>(0xffff)) == this->vk)
-				this->receiver();
-			return false;
+			return msg->message == WM_HOTKEY && LOWORD(msg->lParam) == this->mods && HIWORD(msg->lParam) == this->vk;
 		};
 };
 
-GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : id(QCryptographicHash::hash(keys, QCryptographicHash::Md5).toInt()){
-	QStringList key_list = QString(keys).split('|', QString::SkipEmptyParts);
+static QAbstractNativeEventFilter* registerHotkey(QStringList keys, int id, std::function<void()> receiver){
 	UINT mods = 0, vk = 0;
-	for(QString& key : key_list){
+	for(QString& key : keys){
 		if(key == "ALT")
 			mods |= MOD_ALT;
 		else if(key == "CTRL")
@@ -48,23 +57,31 @@ GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : i
 		else if(key.length() == 1)
                         vk = key[0].toUpper().unicode();
 	}
-	if((this->ok = RegisterHotKey(NULL, this->id, mods, vk))){
-		this->filter = new WinEventFilter(mods, vk, receiver);
-		QCoreApplication::instance()->installNativeEventFilter(this->filter);
-	}
+	return RegisterHotKey(NULL, id, mods, vk) ? new WinEventFilter(mods, vk, receiver) : nullptr;
 }
 
-GlobalHotkey::~GlobalHotkey(void){
-	if(this->ok){
-		QCoreApplication::instance()->removeNativeEventFilter(this->filter);
-		delete this->filter;
-		UnregisterHotKey(NULL, this->id);
-	}
+static void unregisterHotkey(int id){
+	UnregisterHotKey(NULL, id);
 }
+
 #else
 #error "Non-windows body not implemented yet!"
 #endif
 
+GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : id(QCryptographicHash::hash(keys, QCryptographicHash::Md5).toInt()),
+										filter(registerHotkey(QString(keys).split('|', QString::SkipEmptyParts), this->id, receiver)){
+	if(this->filter)
+		QCoreApplication::instance()->installNativeEventFilter(this->filter);
+}
+
+GlobalHotkey::~GlobalHotkey(void){
+	if(this->filter){
+		QCoreApplication::instance()->removeNativeEventFilter(this->filter);
+		delete this->filter;
+		unregisterHotkey(this->id);
+	}
+}
+
 bool GlobalHotkey::isOk() const{
-	return this->ok;
+	return this->filter;
 }

@@ -3,6 +3,7 @@ TODO
 General:
 - draw icons
 - add application config file
+- about dialog
 
 Unix:
 - Qt linkage
