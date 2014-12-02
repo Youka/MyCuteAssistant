@@ -5,7 +5,6 @@ General:
 - add application config file
 - about dialog
 - add cmake submodules (src compile, docs install)
-- always on top option
 - more members to GlobalHotkeys
 
 Unix:

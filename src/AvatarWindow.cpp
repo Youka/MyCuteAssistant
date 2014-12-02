@@ -15,9 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include "AvatarWindow.hpp"
 
-AvatarWindow::AvatarWindow(void){
-	// Set window properties
-	this->setWindowFlags(this->windowFlags()|Qt::Tool|Qt::FramelessWindowHint);
+AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
 	// Set dummy as this window's placeholder in application top windows
 	this->dummy = new QWidget;
 }

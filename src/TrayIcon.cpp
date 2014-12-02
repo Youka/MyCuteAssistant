@@ -17,6 +17,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QWidget>
 #include "config.h"
 #include <QtWidgets/QMenu>
+#ifdef _WIN32
+#include <windows.h>
+#endif // _WIN32
 
 // External image access
 #define IMPORT_RESOURCE_IMAGE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
@@ -30,11 +33,15 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
 	// Add tray icon menu
 	QMenu* tray_menu = new QMenu(parent);
-	QAction* tray_menu_first_item = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
+	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
+	QAction* tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
+	tray_menu_on_top->setText("Buuhuhu");
+	tray_menu_on_top->setCheckable(true);
+	tray_menu->addAction(tray_menu_on_top);
 	tray_menu->addSeparator();
 	tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
 	this->setContextMenu(tray_menu);
-	// Set tray icon action
+	// Set tray icon actions
 	QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason){
 		switch(reason){
 			case QSystemTrayIcon::ActivationReason::DoubleClick:
@@ -42,20 +49,32 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 					parent->activateWindow();
 				break;
 			case QSystemTrayIcon::ActivationReason::Context:
-				if(parent->isVisible() && tray_menu_first_item->text() != "*Crouch*"){
-					tray_menu_first_item->setText("*Crouch*");
-					tray_menu_first_item->disconnect(parent);
-					parent->connect(tray_menu_first_item, SIGNAL(triggered()), SLOT(hide()));
-				}else if(parent->isHidden() && tray_menu_first_item->text() != "*Emerge*"){
-					tray_menu_first_item->setText("*Emerge*");
-					tray_menu_first_item->disconnect(parent);
-					parent->connect(tray_menu_first_item, SIGNAL(triggered()), SLOT(show()));
+				if(parent->isVisible() && tray_menu_show_hide->text() != "*Crouch*"){
+					tray_menu_show_hide->setText("*Crouch*");
+					tray_menu_show_hide->disconnect(parent);
+					parent->connect(tray_menu_show_hide, SIGNAL(triggered()), SLOT(hide()));
+				}else if(parent->isHidden() && tray_menu_show_hide->text() != "*Emerge*"){
+					tray_menu_show_hide->setText("*Emerge*");
+					tray_menu_show_hide->disconnect(parent);
+					parent->connect(tray_menu_show_hide, SIGNAL(triggered()), SLOT(show()));
 				}
 				break;
 			case QSystemTrayIcon::ActivationReason::Unknown:
 			case QSystemTrayIcon::ActivationReason::Trigger:
 			case QSystemTrayIcon::ActivationReason::MiddleClick: break;
 		}
+	});
+	QObject::connect(tray_menu_on_top, &QAction::triggered, [=](bool checked){
+#ifdef _WIN32
+		SetWindowPos(reinterpret_cast<HWND>(parent->winId()), checked ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+#else
+		bool was_shown = parent->isVisible();
+		parent->setWindowFlags(checked ?
+					parent->windowFlags() | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint :
+					parent->windowFlags() & ~(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint));
+		if(was_shown)
+			parent->show();
+#endif // _WIN32
 	});
 }
 
