@@ -15,7 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtWidgets/QSystemTrayIcon.h>
+#include <QtWidgets/QSystemTrayIcon>
 #include "GlobalHotkey.hpp"
 
 class TrayIcon : public QSystemTrayIcon{
@@ -23,4 +23,5 @@ class TrayIcon : public QSystemTrayIcon{
 		GlobalHotkey hotkey;
 	public:
 		TrayIcon(QWidget* parent);
+		void show(void);
 };

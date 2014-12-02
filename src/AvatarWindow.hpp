@@ -15,7 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtWidgets/QWidget.h>
+#include <QtWidgets/QWidget>
 
 class AvatarWindow : public QWidget{
 	private:

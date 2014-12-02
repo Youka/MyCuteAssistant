@@ -14,9 +14,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "GlobalHotkey.hpp"
-#include <QtCore/QCryptographicHash.h>
-#include <QtCore/QStringList.h>
-#include <QtCore/QCoreApplication.h>
+#include <QtCore/QCryptographicHash>
+#include <QtCore/QStringList>
+#include <QtCore/QCoreApplication>
 
 class NativeEventFilter : public QAbstractNativeEventFilter{
 	private:

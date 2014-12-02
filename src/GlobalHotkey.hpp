@@ -15,7 +15,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtCore/QAbstractNativeEventFilter.h>
+#include <QtCore/QAbstractNativeEventFilter>
 #include <functional>
 
 class GlobalHotkey{

@@ -13,13 +13,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#include <QtWidgets/QApplication.h>
+#include <QtWidgets/QApplication>
 #include "AvatarWindow.hpp"
 #include "TrayIcon.hpp"
 
 // Windows expects a static Qt5, so have to link plugins in source
 #ifdef _WIN32
-#include <QtCore/QPlugin.h>
+#include <QtCore/QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 Q_IMPORT_PLUGIN(QICOPlugin)
 #endif

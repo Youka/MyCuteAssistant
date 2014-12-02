@@ -14,10 +14,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "TrayIcon.hpp"
-#include <QtWidgets/QWidget.h>
+#include <QtWidgets/QWidget>
 #include "config.h"
-#include <QtWidgets/QMenu.h>
-#include <QtWidgets/QMessageBox.h>
+#include <QtWidgets/QMenu>
 
 // External image access
 #define IMPORT_RESOURCE_IMAGE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
@@ -58,10 +57,10 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 			case QSystemTrayIcon::ActivationReason::MiddleClick: break;
 		}
 	});
-	// Check hotkey
-	if(!hotkey.isOk()){
-		QMessageBox msg(QMessageBox::Warning, APP_NAME, "Hotkey couldn't be bound!");
-		msg.setWindowIcon(QICON(logo_ico));
-		msg.exec();
-	}
+}
+
+void TrayIcon::show(void){
+	QSystemTrayIcon::show();
+	if(!this->hotkey.isOk())
+		this->showMessage(APP_NAME, "Couldn't bind hotkey!", QSystemTrayIcon::Warning, 8000);
 }
