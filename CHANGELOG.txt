@@ -3,9 +3,8 @@ TODO
 General:
 - Speech API
 - draw icons
-- about dialog
 - avatar position/mouse actions
-- add application config file
+- about dialog
 
 Unix:
 - Qt linkage

@@ -69,8 +69,8 @@ static void unregisterHotkey(int id){
 #endif
 
 QAtomicInt atom_int;
-GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : id(atom_int++),
-										filter(registerHotkey(QString(keys).split('|', QString::SkipEmptyParts), this->id, receiver)){
+GlobalHotkey::GlobalHotkey(QString keys, std::function<void()> receiver) : id(atom_int++),
+										filter(registerHotkey(keys.split('|', QString::SkipEmptyParts), this->id, receiver)){
 	if(this->filter)
 		QCoreApplication::instance()->installNativeEventFilter(this->filter);
 }

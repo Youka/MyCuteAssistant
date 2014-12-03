@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: GlobalHotkey.hpp
+File: Config.hpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -15,19 +15,17 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtCore/QAbstractNativeEventFilter>
-#include <functional>
+#include <QtCore/QSettings>
 
-class GlobalHotkey{
-	private:
-		int id;
-		QAbstractNativeEventFilter* filter;
+class Config : protected QSettings{
 	public:
-		GlobalHotkey(QString keys, std::function<void()> receiver);
-		~GlobalHotkey(void);
-		GlobalHotkey(const GlobalHotkey& o) = delete;
-		GlobalHotkey(GlobalHotkey&& o);
-		const GlobalHotkey& operator=(const GlobalHotkey& o) = delete;
-		const GlobalHotkey& operator=(GlobalHotkey&& o);
-		bool isOk() const;
+		// Object managment
+		static Config* instance();
+		Config(QString filename);
+		~Config(void);
+		// Settings
+		bool alwaysOnTop();
+		void alwaysOnTop(bool on);
+		QString hotkey();
+		void hotkey(QString keys);
 };

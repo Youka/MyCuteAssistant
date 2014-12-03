@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: GlobalHotkey.hpp
+File: Config.cpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,21 +13,33 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#pragma once
+#include "Config.hpp"
 
-#include <QtCore/QAbstractNativeEventFilter>
-#include <functional>
+static Config* inst = nullptr;
+Config* Config::instance(){
+	return inst;
+}
 
-class GlobalHotkey{
-	private:
-		int id;
-		QAbstractNativeEventFilter* filter;
-	public:
-		GlobalHotkey(QString keys, std::function<void()> receiver);
-		~GlobalHotkey(void);
-		GlobalHotkey(const GlobalHotkey& o) = delete;
-		GlobalHotkey(GlobalHotkey&& o);
-		const GlobalHotkey& operator=(const GlobalHotkey& o) = delete;
-		const GlobalHotkey& operator=(GlobalHotkey&& o);
-		bool isOk() const;
-};
+Config::Config(QString filename) : QSettings(filename, QSettings::IniFormat, nullptr){
+	// Save this instance to global scope
+	inst = this;
+}
+
+Config::~Config(void){
+	if(inst == this)
+		inst = nullptr;
+}
+
+bool Config::alwaysOnTop(){
+	return this->value("Window/alwaysOnTop", false).toBool();
+}
+void Config::alwaysOnTop(bool on){
+	this->setValue("Window/alwaysOnTop", on);
+}
+
+QString Config::hotkey(){
+	return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
+}
+void Config::hotkey(QString keys){
+	this->setValue("Global/hotkey", keys);
+}

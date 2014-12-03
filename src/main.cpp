@@ -14,6 +14,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include <QtWidgets/QApplication>
+#include "Config.hpp"
 #include "AvatarWindow.hpp"
 #include "TrayIcon.hpp"
 
@@ -28,6 +29,8 @@ Q_IMPORT_PLUGIN(QICOPlugin)
 int main(int argc, char** argv){
 	// Create global Qt application instance
 	QApplication app(argc, argv);
+	// Create global application configuration instance
+	Config conf(app.applicationDirPath() + "/config.ini");
 	// Create & show main windows
 	AvatarWindow main_window;
 	main_window.show();

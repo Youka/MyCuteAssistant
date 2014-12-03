@@ -17,6 +17,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "resources.h"
 #include <QtWidgets/QWidget>
 #include "config.h"
+#include "Config.hpp"
 #include <QtWidgets/QMenu>
 #ifdef _WIN32
 #include <windows.h>
@@ -27,15 +28,14 @@ IMPORT_RESOURCE_FILE(logo_ico)
 IMPORT_RESOURCE_FILE(bye_png)
 IMPORT_RESOURCE_FILE(show_hide_png)
 
-TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey("CTRL|ALT|Y", [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
-	// Set tray icon properties
-	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
+TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
 	// Add tray icon menu
 	QMenu* tray_menu = new QMenu(parent);
 	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
 	QAction* tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
 	tray_menu_on_top->setText("Jiiiiiii...");
 	tray_menu_on_top->setCheckable(true);
+	tray_menu_on_top->setChecked(Config::instance()->alwaysOnTop());
 	tray_menu->addAction(tray_menu_on_top);
 	tray_menu->addSeparator();
 	tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
@@ -74,7 +74,11 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 		if(was_shown)
 			parent->show();
 #endif // _WIN32
+		Config::instance()->alwaysOnTop(checked);
 	});
+	// Set tray icon properties
+	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
+	tray_menu_on_top->triggered(tray_menu_on_top->isChecked());
 }
 
 void TrayIcon::show(void){
