@@ -114,8 +114,8 @@ get_target_property(TARGET_LIBRARIES ${PROJECT_NAME} LINK_LIBRARIES)
 message(STATUS "Additional link targets: ${TARGET_LIBRARIES}")
 
 # Setup binary installation
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-message(STATUS "Binary installation path: ${CMAKE_INSTALL_PREFIX}/bin")
+install(TARGETS ${PROJECT_NAME} DESTINATION ".")
+message(STATUS "Binary installation path: ${CMAKE_INSTALL_PREFIX}")
 
 # Add binary execution test
 add_test(exe_run ${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME} -test)

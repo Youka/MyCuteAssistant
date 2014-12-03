@@ -1,11 +1,12 @@
 TODO
 #####
 General:
+- Speech API
 - draw icons
 - about dialog
+- avatar position/mouse actions
 - add application config file
 
 Unix:
 - Qt linkage
 - Global hotkey
-- Speech API

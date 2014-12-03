@@ -35,7 +35,7 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 	QMenu* tray_menu = new QMenu(parent);
 	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
 	QAction* tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
-	tray_menu_on_top->setText("Buuhuhu");
+	tray_menu_on_top->setText("Jiiiiiii...");
 	tray_menu_on_top->setCheckable(true);
 	tray_menu->addAction(tray_menu_on_top);
 	tray_menu->addSeparator();
