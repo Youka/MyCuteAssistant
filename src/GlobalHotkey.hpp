@@ -25,5 +25,9 @@ class GlobalHotkey{
 	public:
 		GlobalHotkey(const char* keys, std::function<void()> receiver);
 		~GlobalHotkey(void);
+		GlobalHotkey(const GlobalHotkey& o) = delete;
+		GlobalHotkey(GlobalHotkey&& o);
+		const GlobalHotkey& operator=(const GlobalHotkey& o) = delete;
+		const GlobalHotkey& operator=(GlobalHotkey&& o);
 		bool isOk() const;
 };

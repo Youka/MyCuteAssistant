@@ -2,10 +2,9 @@ TODO
 #####
 General:
 - draw icons
-- add application config file
 - about dialog
+- add application config file
 - add cmake submodules (src compile, docs install)
-- more members to GlobalHotkeys
 
 Unix:
 - Qt linkage

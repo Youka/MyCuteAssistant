@@ -14,8 +14,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "GlobalHotkey.hpp"
-#include <QtCore/QCryptographicHash>
 #include <QtCore/QStringList>
+#include <QtCore/QAtomicInt>
 #include <QtCore/QCoreApplication>
 
 class NativeEventFilter : public QAbstractNativeEventFilter{
@@ -68,7 +68,8 @@ static void unregisterHotkey(int id){
 #error "Non-windows body not implemented yet!"
 #endif
 
-GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : id(QCryptographicHash::hash(keys, QCryptographicHash::Md5).toInt()),
+QAtomicInt atom_int;
+GlobalHotkey::GlobalHotkey(const char* keys, std::function<void()> receiver) : id(atom_int++),
 										filter(registerHotkey(QString(keys).split('|', QString::SkipEmptyParts), this->id, receiver)){
 	if(this->filter)
 		QCoreApplication::instance()->installNativeEventFilter(this->filter);
@@ -80,6 +81,20 @@ GlobalHotkey::~GlobalHotkey(void){
 		delete this->filter;
 		unregisterHotkey(this->id);
 	}
+}
+
+GlobalHotkey::GlobalHotkey(GlobalHotkey&& o){
+	this->id = o.id;
+	this->filter = o.filter;
+	o.filter = nullptr;
+}
+
+const GlobalHotkey& GlobalHotkey::operator=(GlobalHotkey&& o){
+	this->~GlobalHotkey();
+	this->id = o.id;
+	this->filter = o.filter;
+	o.filter = nullptr;
+	return *this;
 }
 
 bool GlobalHotkey::isOk() const{
