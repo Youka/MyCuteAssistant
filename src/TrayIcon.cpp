@@ -14,6 +14,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "TrayIcon.hpp"
+#include "resources.h"
 #include <QtWidgets/QWidget>
 #include "config.h"
 #include <QtWidgets/QMenu>
@@ -21,12 +22,10 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <windows.h>
 #endif // _WIN32
 
-// External image access
-#define IMPORT_RESOURCE_IMAGE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
-IMPORT_RESOURCE_IMAGE(logo_ico)
-IMPORT_RESOURCE_IMAGE(bye_png)
-IMPORT_RESOURCE_IMAGE(show_hide_png)
-#define QICON(image) QIcon(QPixmap::fromImage(QImage::fromData(image, image##_size)))
+// External file access
+IMPORT_RESOURCE_FILE(logo_ico)
+IMPORT_RESOURCE_FILE(bye_png)
+IMPORT_RESOURCE_FILE(show_hide_png)
 
 TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey("CTRL|ALT|Y", [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
 	// Set tray icon properties
