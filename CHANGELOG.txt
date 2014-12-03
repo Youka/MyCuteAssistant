@@ -4,7 +4,6 @@ General:
 - draw icons
 - about dialog
 - add application config file
-- add cmake submodules (src compile, docs install)
 
 Unix:
 - Qt linkage
