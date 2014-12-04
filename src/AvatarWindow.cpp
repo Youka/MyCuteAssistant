@@ -14,6 +14,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "AvatarWindow.hpp"
+#ifdef _WIN32
+#include <windows.h>
+#endif // _WIN32
 
 AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
 	// Set dummy as this window's placeholder in application top windows
@@ -23,4 +26,17 @@ AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindow
 void AvatarWindow::closeEvent(QCloseEvent* event){
 	this->dummy->close();
 	QWidget::closeEvent(event);
+}
+
+void AvatarWindow::alwaysOnTop(bool on){
+#ifdef _WIN32
+	SetWindowPos(reinterpret_cast<HWND>(this->winId()), on ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+#else
+	bool was_shown = this->isVisible();
+	this->setWindowFlags(on ?
+				parent->windowFlags() | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint :
+				parent->windowFlags() & ~(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint));
+	if(was_shown)
+		this->show();
+#endif // _WIN32
 }

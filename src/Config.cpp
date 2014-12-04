@@ -14,8 +14,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "Config.hpp"
+#include <QtCore/QAtomicPointer>
 
-static Config* inst = nullptr;
+static QAtomicPointer<Config> inst = nullptr;
 Config* Config::instance(){
 	return inst;
 }

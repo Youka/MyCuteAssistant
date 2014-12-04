@@ -5,6 +5,7 @@ General:
 - draw icons
 - avatar position/mouse actions
 - about dialog
+- Hotkey option
 
 Unix:
 - Qt linkage

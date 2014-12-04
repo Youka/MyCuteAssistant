@@ -17,11 +17,12 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QSystemTrayIcon>
 #include "GlobalHotkey.hpp"
+#include "AvatarWindow.hpp"
 
 class TrayIcon : public QSystemTrayIcon{
 	private:
 		GlobalHotkey hotkey;
 	public:
-		TrayIcon(QWidget* parent);
+		TrayIcon(AvatarWindow* parent);
 		void show(void);
 };

@@ -15,20 +15,16 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include "TrayIcon.hpp"
 #include "resources.h"
-#include <QtWidgets/QWidget>
 #include "config.h"
 #include "Config.hpp"
 #include <QtWidgets/QMenu>
-#ifdef _WIN32
-#include <windows.h>
-#endif // _WIN32
 
 // External file access
 IMPORT_RESOURCE_FILE(logo_ico)
 IMPORT_RESOURCE_FILE(bye_png)
 IMPORT_RESOURCE_FILE(show_hide_png)
 
-TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
+TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), [=](){this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);}){
 	// Add tray icon menu
 	QMenu* tray_menu = new QMenu(parent);
 	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
@@ -64,16 +60,7 @@ TrayIcon::TrayIcon(QWidget* parent) : QSystemTrayIcon(QICON(logo_ico), parent), 
 		}
 	});
 	QObject::connect(tray_menu_on_top, &QAction::triggered, [=](bool checked){
-#ifdef _WIN32
-		SetWindowPos(reinterpret_cast<HWND>(parent->winId()), checked ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-#else
-		bool was_shown = parent->isVisible();
-		parent->setWindowFlags(checked ?
-					parent->windowFlags() | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint :
-					parent->windowFlags() & ~(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint));
-		if(was_shown)
-			parent->show();
-#endif // _WIN32
+		parent->alwaysOnTop(checked);
 		Config::instance()->alwaysOnTop(checked);
 	});
 	// Set tray icon properties

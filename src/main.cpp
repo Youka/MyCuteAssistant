@@ -15,7 +15,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QApplication>
 #include "Config.hpp"
-#include "AvatarWindow.hpp"
 #include "TrayIcon.hpp"
 
 // Windows expects a static Qt5, so have to link plugins in source

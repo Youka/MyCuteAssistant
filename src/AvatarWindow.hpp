@@ -23,4 +23,5 @@ class AvatarWindow : public QWidget{
 		void closeEvent(QCloseEvent* event) override;
 	public:
 		AvatarWindow(void);
+		void alwaysOnTop(bool on);
 };

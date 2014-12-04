@@ -68,7 +68,7 @@ static void unregisterHotkey(int id){
 #error "Non-windows body not implemented yet!"
 #endif
 
-QAtomicInt atom_int;
+static QAtomicInt atom_int;
 GlobalHotkey::GlobalHotkey(QString keys, std::function<void()> receiver) : id(atom_int++),
 										filter(registerHotkey(keys.split('|', QString::SkipEmptyParts), this->id, receiver)){
 	if(this->filter)
