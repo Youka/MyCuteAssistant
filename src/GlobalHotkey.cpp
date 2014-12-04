@@ -57,7 +57,7 @@ static QAbstractNativeEventFilter* registerHotkey(QStringList keys, int id, std:
 		else if(key.length() == 1)
                         vk = key[0].toUpper().unicode();
 	}
-	return RegisterHotKey(NULL, id, mods, vk) ? new WinEventFilter(mods, vk, receiver) : nullptr;
+	return mods && vk && RegisterHotKey(NULL, id, mods, vk) ? new WinEventFilter(mods, vk, receiver) : nullptr;
 }
 
 static void unregisterHotkey(int id){

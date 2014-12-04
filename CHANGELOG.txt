@@ -5,7 +5,7 @@ General:
 - draw icons
 - avatar position/mouse actions
 - about dialog
-- Hotkey option
+- fix: application closes with input dialog when window is hidden
 
 Unix:
 - Qt linkage

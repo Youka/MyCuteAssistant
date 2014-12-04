@@ -24,5 +24,5 @@ class TrayIcon : public QSystemTrayIcon{
 		GlobalHotkey hotkey;
 	public:
 		TrayIcon(AvatarWindow* parent);
-		void show(void);
+		void dbClick(void);
 };
