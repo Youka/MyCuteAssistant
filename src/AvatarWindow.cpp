@@ -16,6 +16,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "AvatarWindow.hpp"
 #include "resources.h"
 #include <QtGui/QIcon>
+#include <QtCore/QCoreApplication>
 #ifdef _WIN32
 #include <windows.h>
 #endif // _WIN32
@@ -26,13 +27,11 @@ IMPORT_RESOURCE_FILE(logo_ico)
 AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
 	// Set window properties
 	this->setWindowIcon(QICON(logo_ico));	// In use by child windows
-	// Set dummy as this window's placeholder in application top windows
-	this->dummy = new QWidget;
 }
 
 void AvatarWindow::closeEvent(QCloseEvent* event){
-	this->dummy->close();
 	QWidget::closeEvent(event);
+	QCoreApplication::instance()->quit();
 }
 
 void AvatarWindow::alwaysOnTop(bool on){

@@ -28,10 +28,11 @@ Q_IMPORT_PLUGIN(QICOPlugin)
 int main(int argc, char** argv){
 	// Create global Qt application instance
 	QApplication app(argc, argv);
+	app.setQuitOnLastWindowClosed(false);	// Prevent stupid behaviour: before even closed when windows are still hidden!
 	// Create global application configuration instance
 	Config conf(app.applicationDirPath() + "/config.ini");
 	// Create & show main windows
-	AvatarWindow main_window;
+	AvatarWindow main_window;	// Quits application on closure
 	main_window.show();
 	TrayIcon tray(&main_window);
 	tray.show();
