@@ -18,6 +18,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QMenu>
 #include "Config.hpp"
 #include <QtWidgets/QInputDialog>
+#include "AboutDialog.hpp"
 #include "config.h"
 
 // External file access
@@ -25,17 +26,19 @@ IMPORT_RESOURCE_FILE(logo_ico)
 IMPORT_RESOURCE_FILE(bye_png)
 IMPORT_RESOURCE_FILE(show_hide_png)
 IMPORT_RESOURCE_FILE(hotkey_png)
+IMPORT_RESOURCE_FILE(about_png)
 
 TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), std::bind(TrayIcon::dbClick, this)){
 	// Add tray icon menu
 	QMenu* tray_menu = new QMenu(parent);
-	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), "");	// Set dynamically (see below)
-	QAction* tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
+	QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), ""),	// Set dynamically (see below)
+		*tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
 	tray_menu_on_top->setText("Jiiiiiii...");
 	tray_menu_on_top->setCheckable(true);
 	tray_menu_on_top->setChecked(Config::instance()->alwaysOnTop());
 	tray_menu->addAction(tray_menu_on_top);
-	QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me...");	// Set dynamically (see below)
+	QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me:"),	// Set dynamically (see below)
+		*tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
 	tray_menu->addSeparator();
 	tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
 	this->setContextMenu(tray_menu);
@@ -67,7 +70,7 @@ TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), pare
 		Config::instance()->alwaysOnTop(checked);
 	});
 	QObject::connect(tray_menu_hotkey, &QAction::triggered, [=](){
-		QString new_keys = QInputDialog::getText(parent, QString(APP_NAME) + " - Hotkey", "Define my hotkey!\nKeys are separated by '|'.\nModifiers: ALT, CTRL, SHIFT.", QLineEdit::Normal, Config::instance()->hotkey());
+		QString new_keys = QInputDialog::getText(parent, QString(APP_NAME) + " - Hotkey", "Define my hotkey!\nKeys are separated by '|'.\nModifiers: ALT, CTRL, SHIFT.", QLineEdit::Normal, Config::instance()->hotkey(), nullptr, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
                 if(!new_keys.isEmpty()){
 			GlobalHotkey new_hotkey(new_keys, std::bind(TrayIcon::dbClick, this));
 			if(new_hotkey.isOk()){
@@ -76,6 +79,9 @@ TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), pare
 			}else
 				this->showMessage(APP_NAME, "Invalid hotkey!", QSystemTrayIcon::Information, 5000);
                 }
+	});
+	QObject::connect(tray_menu_about, &QAction::triggered, [=](){
+		AboutDialog(parent).exec();
 	});
 	// Set tray icon properties
 	this->setToolTip(APP_NAME " v" APP_VERSION_STRING);

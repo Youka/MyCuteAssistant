@@ -27,3 +27,4 @@
 # CMake files
 CMakeFiles.txt	diff=cmake
 *.cmake		diff=cmake
+*.h.in		diff=c
