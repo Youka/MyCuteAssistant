@@ -16,31 +16,33 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "Config.hpp"
 #include <QtCore/QAtomicPointer>
 
-static QAtomicPointer<Config> inst = nullptr;
-Config* Config::instance(){
-	return inst;
-}
+namespace MCA{
+	static QAtomicPointer<Config> inst = nullptr;
+	Config* Config::instance(){
+		return inst;
+	}
 
-Config::Config(QString filename) : QSettings(filename, QSettings::IniFormat, nullptr){
-	// Save this instance to global scope
-	inst = this;
-}
+	Config::Config(QString filename) : QSettings(filename, QSettings::IniFormat, nullptr){
+		// Save this instance to global scope
+		inst = this;
+	}
 
-Config::~Config(void){
-	if(inst == this)
-		inst = nullptr;
-}
+	Config::~Config(void){
+		if(inst == this)
+			inst = nullptr;
+	}
 
-bool Config::alwaysOnTop(){
-	return this->value("Window/alwaysOnTop", false).toBool();
-}
-void Config::alwaysOnTop(bool on){
-	this->setValue("Window/alwaysOnTop", on);
-}
+	bool Config::alwaysOnTop(){
+		return this->value("Window/alwaysOnTop", false).toBool();
+	}
+	void Config::alwaysOnTop(bool on){
+		this->setValue("Window/alwaysOnTop", on);
+	}
 
-QString Config::hotkey(){
-	return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
-}
-void Config::hotkey(QString keys){
-	this->setValue("Global/hotkey", keys);
+	QString Config::hotkey(){
+		return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
+	}
+	void Config::hotkey(QString keys){
+		this->setValue("Global/hotkey", keys);
+	}
 }

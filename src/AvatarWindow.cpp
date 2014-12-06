@@ -24,25 +24,27 @@ Permission is granted to anyone to use this software for any purpose, including 
 // External file access
 IMPORT_RESOURCE_FILE(logo_ico)
 
-AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
-	// Set window properties
-	this->setWindowIcon(QICON(logo_ico));	// In use by child windows
-}
+namespace MCA{
+	AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
+		// Set window properties
+		this->setWindowIcon(QICON(logo_ico));	// In use by child windows
+	}
 
-void AvatarWindow::closeEvent(QCloseEvent* event){
-	QWidget::closeEvent(event);
-	QCoreApplication::instance()->quit();
-}
+	void AvatarWindow::closeEvent(QCloseEvent* event){
+		QWidget::closeEvent(event);
+		QCoreApplication::instance()->quit();
+	}
 
-void AvatarWindow::alwaysOnTop(bool on){
-#ifdef _WIN32
-	SetWindowPos(reinterpret_cast<HWND>(this->winId()), on ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-#else
-	bool was_shown = this->isVisible();
-	this->setWindowFlags(on ?
-				parent->windowFlags() | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint :
-				parent->windowFlags() & ~(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint));
-	if(was_shown)
-		this->show();
-#endif // _WIN32
+	void AvatarWindow::alwaysOnTop(bool on){
+	#ifdef _WIN32
+		SetWindowPos(reinterpret_cast<HWND>(this->winId()), on ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	#else
+		bool was_shown = this->isVisible();
+		this->setWindowFlags(on ?
+					parent->windowFlags() | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint :
+					parent->windowFlags() & ~(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint));
+		if(was_shown)
+			this->show();
+	#endif // _WIN32
+	}
 }

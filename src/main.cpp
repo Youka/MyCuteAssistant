@@ -30,11 +30,11 @@ int main(int argc, char** argv){
 	QApplication app(argc, argv);
 	app.setQuitOnLastWindowClosed(false);	// Prevent stupid behaviour: before even closed when windows are still hidden!
 	// Create global application configuration instance
-	Config conf(app.applicationDirPath() + "/config.ini");
+	MCA::Config conf(app.applicationDirPath() + "/config.ini");
 	// Create & show main windows
-	AvatarWindow main_window;	// Quits application on closure
+	MCA::AvatarWindow main_window;	// Quits application on closure
 	main_window.show();
-	TrayIcon tray(&main_window);
+	MCA::TrayIcon tray(&main_window);
 	tray.show();
 	// Run Qt application & return his status code to this program
 	return app.exec();

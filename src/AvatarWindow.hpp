@@ -17,10 +17,12 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QWidget>
 
-class AvatarWindow : public QWidget{
-	private:
-		void closeEvent(QCloseEvent* event) override;
-	public:
-		AvatarWindow(void);
-		void alwaysOnTop(bool on);
-};
+namespace MCA{
+	class AvatarWindow : public QWidget{
+		private:
+			void closeEvent(QCloseEvent* event) override;
+		public:
+			AvatarWindow(void);
+			void alwaysOnTop(bool on);
+	};
+}

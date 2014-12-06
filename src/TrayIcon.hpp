@@ -19,10 +19,12 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "GlobalHotkey.hpp"
 #include "AvatarWindow.hpp"
 
-class TrayIcon : public QSystemTrayIcon{
-	private:
-		GlobalHotkey hotkey;
-	public:
-		TrayIcon(AvatarWindow* parent);
-		void dbClick(void);
-};
+namespace MCA{
+	class TrayIcon : public QSystemTrayIcon{
+		private:
+			GlobalHotkey hotkey;
+		public:
+			TrayIcon(AvatarWindow* parent);
+			void dbClick(void);
+	};
+}

@@ -15,15 +15,17 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include "AboutDialog.hpp"
 
-AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent, Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint){
+namespace MCA{
+	AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent, Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint){
 
-	// TODO
+		// TODO
 
-	// Set dialog properties
-	this->setFocusPolicy(Qt::StrongFocus);	// Needed for focus events
-	this->setFixedSize(this->size());
-}
+		// Set dialog properties
+		this->setFocusPolicy(Qt::StrongFocus);	// Needed for focus events
+		this->setFixedSize(this->size());
+	}
 
-void AboutDialog::focusOutEvent(QFocusEvent*){
-	this->close();
+	void AboutDialog::focusOutEvent(QFocusEvent*){
+		this->close();
+	}
 }

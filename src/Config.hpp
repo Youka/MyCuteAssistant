@@ -17,15 +17,17 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtCore/QSettings>
 
-class Config : protected QSettings{
-	public:
-		// Object managment
-		static Config* instance();
-		Config(QString filename);
-		~Config(void);
-		// Settings
-		bool alwaysOnTop();
-		void alwaysOnTop(bool on);
-		QString hotkey();
-		void hotkey(QString keys);
-};
+namespace MCA{
+	class Config : protected QSettings{
+		public:
+			// Object managment
+			static Config* instance();
+			Config(QString filename);
+			~Config(void);
+			// Settings
+			bool alwaysOnTop();
+			void alwaysOnTop(bool on);
+			QString hotkey();
+			void hotkey(QString keys);
+	};
+}

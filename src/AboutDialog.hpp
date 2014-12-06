@@ -17,9 +17,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QDialog>
 
-class AboutDialog : public QDialog{
-	public:
-		AboutDialog(QWidget* parent = nullptr);
-	protected:
-		void focusOutEvent(QFocusEvent*) override;
-};
+namespace MCA{
+	class AboutDialog : public QDialog{
+		public:
+			AboutDialog(QWidget* parent = nullptr);
+		protected:
+			void focusOutEvent(QFocusEvent*) override;
+	};
+}
