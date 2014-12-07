@@ -20,7 +20,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 namespace MCA{
 	class AvatarWindow : public QWidget{
 		private:
+			QPoint mouse_press_pos;
+		protected:
 			void closeEvent(QCloseEvent* event) override;
+			void mousePressEvent(QMouseEvent* event) override;
+			void mouseMoveEvent(QMouseEvent* event) override;
 		public:
 			AvatarWindow(void);
 			void alwaysOnTop(bool on);

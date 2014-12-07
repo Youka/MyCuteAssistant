@@ -19,6 +19,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "resources.h"
 #include <QtGui/QIcon>
 #include "Config.hpp"
+#include <QtGui/QMouseEvent>
 #ifdef _WIN32
 #include <windows.h>
 #endif // _WIN32
@@ -37,11 +38,6 @@ namespace MCA{
 		this->alwaysOnTop(Config::instance()->alwaysOnTop());
 	}
 
-	void AvatarWindow::closeEvent(QCloseEvent* event){
-		QWidget::closeEvent(event);
-		QCoreApplication::instance()->quit();
-	}
-
 	void AvatarWindow::alwaysOnTop(bool on){
 	#ifdef _WIN32
 		SetWindowPos(reinterpret_cast<HWND>(this->winId()), on ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
@@ -53,5 +49,34 @@ namespace MCA{
 		if(was_shown)
 			this->show();
 	#endif // _WIN32
+	}
+
+	void AvatarWindow::closeEvent(QCloseEvent* event){
+		QWidget::closeEvent(event);
+		QCoreApplication::instance()->quit();
+	}
+
+	void AvatarWindow::mousePressEvent(QMouseEvent* event){
+		if(event->button() == Qt::LeftButton){
+			event->setAccepted(true);
+			this->mouse_press_pos = event->pos();
+		}
+	}
+	void AvatarWindow::mouseMoveEvent(QMouseEvent* event){
+		if(event->buttons() & Qt::LeftButton){
+			event->setAccepted(true);
+			QRect geometry = this->geometry(),
+				desktop_geometry = QApplication::desktop()->availableGeometry();
+			geometry.translate(event->pos() - this->mouse_press_pos);
+			if(geometry.left() < desktop_geometry.left())
+				geometry.translate(desktop_geometry.left() - geometry.left(), 0);
+			if(geometry.top() < desktop_geometry.top())
+				geometry.translate(0, desktop_geometry.top() - geometry.top());
+			if(geometry.right() > desktop_geometry.right())
+				geometry.translate(desktop_geometry.right() - geometry.right(), 0);
+			if(geometry.bottom() > desktop_geometry.bottom())
+				geometry.translate(0, desktop_geometry.bottom() - geometry.bottom());
+			this->setGeometry(geometry);
+		}
 	}
 }
