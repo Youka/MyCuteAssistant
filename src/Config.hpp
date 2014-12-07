@@ -16,6 +16,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #pragma once
 
 #include <QtCore/QSettings>
+#include <QtCore/QPoint>
 
 namespace MCA{
 	class Config : protected QSettings{
@@ -29,5 +30,7 @@ namespace MCA{
 			void alwaysOnTop(bool on);
 			QString hotkey();
 			void hotkey(QString keys);
+			QPoint position();
+			void position(QPoint pos);
 	};
 }

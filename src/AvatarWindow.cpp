@@ -30,8 +30,12 @@ IMPORT_RESOURCE_FILE(logo_ico)
 namespace MCA{
 	AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
 		// Set window position
-		QRect desktop_geometry = QApplication::desktop()->availableGeometry();
-		this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
+		QPoint config_pos = Config::instance()->position();
+		if(config_pos.x() < 0 || config_pos.y() < 0){
+			QRect desktop_geometry = QApplication::desktop()->availableGeometry();
+			this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
+		}else
+			this->move(config_pos);
 		// Set window properties
 		this->setWindowIcon(QICON(logo_ico));	// In use by child windows
 		this->setCursor(Qt::PointingHandCursor);
@@ -77,6 +81,7 @@ namespace MCA{
 			if(geometry.bottom() > desktop_geometry.bottom())
 				geometry.translate(0, desktop_geometry.bottom() - geometry.bottom());
 			this->setGeometry(geometry);
+			Config::instance()->position(this->pos());
 		}
 	}
 }

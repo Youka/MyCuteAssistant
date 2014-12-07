@@ -45,4 +45,11 @@ namespace MCA{
 	void Config::hotkey(QString keys){
 		this->setValue("Global/hotkey", keys);
 	}
+	QPoint Config::position(){
+		return QPoint(this->value("Window/x", -1).toInt(), this->value("Window/y", -1).toInt());
+	}
+	void Config::position(QPoint pos){
+		this->setValue("Window/x", pos.x());
+		this->setValue("Window/y", pos.y());
+	}
 }
