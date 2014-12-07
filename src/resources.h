@@ -14,4 +14,5 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #define IMPORT_RESOURCE_FILE(name) extern "C" const unsigned char name[]; extern "C" const unsigned name##_size;
-#define QICON(image) QIcon(QPixmap::fromImage(QImage::fromData(image, image##_size)))
+#define QPIXMAP(image) QPixmap::fromImage(QImage::fromData(image, image##_size))
+#define QICON(image) QIcon(QPIXMAP(image))

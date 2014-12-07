@@ -14,15 +14,45 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "AboutDialog.hpp"
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
+#include "resources.h"
+#include "config.h"
+
+// External file access
+IMPORT_RESOURCE_FILE(logo_big_png)
 
 namespace MCA{
-	AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent, Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint){
-
-		// TODO
-
+	AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent, Qt::CustomizeWindowHint){
+		// Create childs
+		QLabel* image_display = new QLabel,
+			*head_display = new QLabel,
+			*text_display = new QLabel,
+			*foot_display = new QLabel;
+		image_display->setPixmap(QPIXMAP(logo_big_png));
+		head_display->setTextFormat(Qt::RichText);
+		head_display->setText(QString("<center><b><u><font size=4>%1 v%2</font></u><br>%3</b></center>").arg(APP_NAME, APP_VERSION_STRING, APP_DESCRIPTION));
+		text_display->setTextFormat(Qt::RichText);
+		text_display->setText(QString("<u>Programmer:</u> %2").arg(APP_AUTHOR));
+		foot_display->setTextFormat(Qt::RichText);
+		foot_display->setText(QString("<font size=2>Build on %1, %2.</font>").arg(__DATE__, __TIME__));
+		// Set layout
+		QVBoxLayout* vbox = new QVBoxLayout;
+		vbox->addWidget(image_display, 0, Qt::AlignHCenter);
+		vbox->addWidget(head_display, 0, Qt::AlignHCenter);
+		vbox->addSpacing(10);
+		vbox->addWidget(text_display, 0, Qt::AlignLeft);
+		vbox->addSpacing(10);
+		vbox->addWidget(foot_display, 0, Qt::AlignHCenter);
+		this->setLayout(vbox);
 		// Set dialog properties
 		this->setFocusPolicy(Qt::StrongFocus);	// Needed for focus events
+		this->adjustSize();
 		this->setFixedSize(this->size());
+		QPalette palette = this->palette();
+		palette.setColor(QPalette::Window, Qt::white);
+		this->setPalette(palette);
+		this->setWindowOpacity(0.9);
 	}
 
 	void AboutDialog::focusOutEvent(QFocusEvent*){
