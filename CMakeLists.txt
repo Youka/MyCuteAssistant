@@ -18,3 +18,7 @@ message(STATUS "Finished source")
 # Process documents
 add_subdirectory(docs)
 message(STATUS "Finished documents")
+
+# Process characters
+add_subdirectory(characters)
+message(STATUS "Finished characters")
