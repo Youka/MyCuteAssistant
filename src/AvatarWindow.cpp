@@ -14,9 +14,11 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "AvatarWindow.hpp"
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 #include "resources.h"
 #include <QtGui/QIcon>
-#include <QtCore/QCoreApplication>
+#include "Config.hpp"
 #ifdef _WIN32
 #include <windows.h>
 #endif // _WIN32
@@ -26,8 +28,13 @@ IMPORT_RESOURCE_FILE(logo_ico)
 
 namespace MCA{
 	AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
+		// Set window position
+		QRect desktop_geometry = QApplication::desktop()->availableGeometry();
+		this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
 		// Set window properties
 		this->setWindowIcon(QICON(logo_ico));	// In use by child windows
+		this->setCursor(Qt::PointingHandCursor);
+		this->alwaysOnTop(Config::instance()->alwaysOnTop());
 	}
 
 	void AvatarWindow::closeEvent(QCloseEvent* event){

@@ -63,8 +63,10 @@ else()
 endif()
 
 # Set application type: windows
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_CREATE_WIN32_EXE}")
-message(STATUS "Executable type: windows/non-console")
+if(NOT(CMAKE_BUILD_TYPE STREQUAL Debug))
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_CREATE_WIN32_EXE}")
+	message(STATUS "Executable type: windows/non-console")
+endif()
 
 # Set additional search directories for compilation
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/res ${CMAKE_CURRENT_BINARY_DIR} ${BUILD_QT5_DIR}/include)	# Configuration & windows resources & qt5

@@ -86,7 +86,6 @@ namespace MCA{
 		});
 		// Set tray icon properties
 		this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
-		tray_menu_on_top->toggled(tray_menu_on_top->isChecked());
 	}
 
 	void TrayIcon::dbClick(void){
