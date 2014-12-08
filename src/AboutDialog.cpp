@@ -33,16 +33,17 @@ namespace MCA{
 		head_display->setTextFormat(Qt::RichText);
 		head_display->setText(QString("<center><b><u><font size=4>%1 v%2</font></u><br>%3</b></center>").arg(APP_NAME, APP_VERSION_STRING, APP_DESCRIPTION));
 		text_display->setTextFormat(Qt::RichText);
-		text_display->setText(QString("<u>Programmer:</u> %2").arg(APP_AUTHOR));
+		text_display->setOpenExternalLinks(true);
+		text_display->setText(QString("<u>Programmer:</u><br>&nbsp;&nbsp;&nbsp;&nbsp;%2<br><u>Powered by:</u><br>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"http://qt-project.org\">Qt5</a>").arg(APP_AUTHOR));
 		foot_display->setTextFormat(Qt::RichText);
 		foot_display->setText(QString("<font size=2>Build on %1, %2.</font>").arg(__DATE__, __TIME__));
 		// Set layout
 		QVBoxLayout* vbox = new QVBoxLayout;
 		vbox->addWidget(image_display, 0, Qt::AlignHCenter);
 		vbox->addWidget(head_display, 0, Qt::AlignHCenter);
-		vbox->addSpacing(10);
+		vbox->addSpacing(8);
 		vbox->addWidget(text_display, 0, Qt::AlignLeft);
-		vbox->addSpacing(10);
+		vbox->addSpacing(8);
 		vbox->addWidget(foot_display, 0, Qt::AlignHCenter);
 		this->setLayout(vbox);
 		// Set dialog properties
