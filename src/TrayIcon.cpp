@@ -48,12 +48,16 @@ namespace MCA{
 		tray_menu->addSeparator();
 		QMenu* tray_menu_custom_menu = tray_menu->addMenu(QICON(custom_png), "Huh?");
 		QMenu* tray_menu_custom_menu_characters = tray_menu_custom_menu->addMenu(QICON(characters_png), "Who?");
-		QStringList characters = Character::possibleNames();
-		for(QString& character : characters)
-			QObject::connect(tray_menu_custom_menu_characters->addAction(QICON(character_png), character), &QAction::triggered, [character,parent](){
-				parent->loadCharacter(character);
-				Config::instance()->character(character);
-			});
+		QObject::connect(tray_menu_custom_menu_characters, &QMenu::aboutToShow, [tray_menu_custom_menu_characters](){
+			tray_menu_custom_menu_characters->clear();
+			QStringList characters = Character::possibleNames();
+			for(QString& character : characters)
+				tray_menu_custom_menu_characters->addAction(QICON(character_png), character);
+		});
+		QObject::connect(tray_menu_custom_menu_characters, &QMenu::triggered, [parent](QAction* action){
+			parent->loadCharacter(action->text());
+			Config::instance()->character(action->text());
+		});
 		QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me:"),	// Set dynamically (see below)
 			*tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
 		QObject::connect(tray_menu_hotkey, &QAction::triggered, [parent,this](){

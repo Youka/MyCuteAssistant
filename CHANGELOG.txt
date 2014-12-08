@@ -3,7 +3,8 @@ TODO
 General:
 - Speech API
 - draw icons
-- avatar position/mouse actions
+- bubble interaction
+- expand customization menu (opacity, size)
 
 Unix:
 - Qt linkage
