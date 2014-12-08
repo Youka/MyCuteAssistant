@@ -23,10 +23,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 // External file access
 IMPORT_RESOURCE_FILE(logo_ico)
-IMPORT_RESOURCE_FILE(bye_png)
 IMPORT_RESOURCE_FILE(show_hide_png)
+IMPORT_RESOURCE_FILE(custom_png)
+IMPORT_RESOURCE_FILE(characters_png)
+IMPORT_RESOURCE_FILE(character_png)
 IMPORT_RESOURCE_FILE(hotkey_png)
 IMPORT_RESOURCE_FILE(about_png)
+IMPORT_RESOURCE_FILE(bye_png)
 
 namespace MCA{
 	TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), std::bind(TrayIcon::dbClick, this)){
@@ -37,14 +40,41 @@ namespace MCA{
 		tray_menu_on_top->setText("Jiiiiiii...");
 		tray_menu_on_top->setCheckable(true);
 		tray_menu_on_top->setChecked(Config::instance()->alwaysOnTop());
+		QObject::connect(tray_menu_on_top, &QAction::toggled, [parent](bool checked){
+			parent->alwaysOnTop(checked);
+			Config::instance()->alwaysOnTop(checked);
+		});
 		tray_menu->addAction(tray_menu_on_top);
+		tray_menu->addSeparator();
+		QMenu* tray_menu_custom_menu = tray_menu->addMenu(QICON(custom_png), "Huh?");
+		QMenu* tray_menu_custom_menu_characters = tray_menu_custom_menu->addMenu(QICON(characters_png), "Who?");
+		QStringList characters = Character::possibleNames();
+		for(QString& character : characters)
+			QObject::connect(tray_menu_custom_menu_characters->addAction(QICON(character_png), character), &QAction::triggered, [character,parent](){
+				parent->loadCharacter(character);
+				Config::instance()->character(character);
+			});
 		QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me:"),	// Set dynamically (see below)
 			*tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
+		QObject::connect(tray_menu_hotkey, &QAction::triggered, [parent,this](){
+			QString new_keys = QInputDialog::getText(parent, QString(APP_NAME) + " - Hotkey", "Define my hotkey!\nKeys are separated by '|'.\nModifiers: ALT, CTRL, SHIFT.", QLineEdit::Normal, Config::instance()->hotkey(), nullptr, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
+			if(!new_keys.isEmpty()){
+				GlobalHotkey new_hotkey(new_keys, std::bind(TrayIcon::dbClick, this));
+				if(new_hotkey.isOk()){
+					this->hotkey = std::move(new_hotkey);
+					Config::instance()->hotkey(new_keys);
+				}else
+					this->showMessage(APP_NAME, "Invalid hotkey!", QSystemTrayIcon::Information, 5000);
+			}
+		});
+		QObject::connect(tray_menu_about, &QAction::triggered, [parent](){
+			AboutDialog(parent).exec();
+		});
 		tray_menu->addSeparator();
 		tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
 		this->setContextMenu(tray_menu);
 		// Set tray icon actions
-		QObject::connect(this, &QSystemTrayIcon::activated, [=](QSystemTrayIcon::ActivationReason reason){
+		QObject::connect(this, &QSystemTrayIcon::activated, [parent,tray_menu_show_hide](QSystemTrayIcon::ActivationReason reason){
 			switch(reason){
 				case QSystemTrayIcon::ActivationReason::DoubleClick:
 					if(parent->isVisible())
@@ -65,24 +95,6 @@ namespace MCA{
 				case QSystemTrayIcon::ActivationReason::Trigger:
 				case QSystemTrayIcon::ActivationReason::MiddleClick: break;
 			}
-		});
-		QObject::connect(tray_menu_on_top, &QAction::toggled, [=](bool checked){
-			parent->alwaysOnTop(checked);
-			Config::instance()->alwaysOnTop(checked);
-		});
-		QObject::connect(tray_menu_hotkey, &QAction::triggered, [=](){
-			QString new_keys = QInputDialog::getText(parent, QString(APP_NAME) + " - Hotkey", "Define my hotkey!\nKeys are separated by '|'.\nModifiers: ALT, CTRL, SHIFT.", QLineEdit::Normal, Config::instance()->hotkey(), nullptr, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
-			if(!new_keys.isEmpty()){
-				GlobalHotkey new_hotkey(new_keys, std::bind(TrayIcon::dbClick, this));
-				if(new_hotkey.isOk()){
-					this->hotkey = std::move(new_hotkey);
-					Config::instance()->hotkey(new_keys);
-				}else
-					this->showMessage(APP_NAME, "Invalid hotkey!", QSystemTrayIcon::Information, 5000);
-			}
-		});
-		QObject::connect(tray_menu_about, &QAction::triggered, [=](){
-			AboutDialog(parent).exec();
 		});
 		// Set tray icon properties
 		this->setToolTip(APP_NAME " v" APP_VERSION_STRING);

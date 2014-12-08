@@ -4,7 +4,6 @@ General:
 - Speech API
 - draw icons
 - avatar position/mouse actions
-- add character change menu
 
 Unix:
 - Qt linkage
