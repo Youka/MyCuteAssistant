@@ -14,6 +14,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 */
 
 #include "AvatarWindow.hpp"
+#include <QtWidgets/QMessageBox>
+#include "config.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include "resources.h"
@@ -28,7 +30,15 @@ Permission is granted to anyone to use this software for any purpose, including 
 IMPORT_RESOURCE_FILE(logo_ico)
 
 namespace MCA{
-	AvatarWindow::AvatarWindow(void) : QWidget(nullptr, Qt::Tool|Qt::FramelessWindowHint){
+	AvatarWindow::AvatarWindow(void) : QLabel(nullptr, Qt::Tool|Qt::FramelessWindowHint){
+		// Set window icon (in use by child windows)
+		this->setWindowIcon(QICON(logo_ico));
+		// Set character image
+		this->setAttribute(Qt::WA_TranslucentBackground);
+		this->loadCharacter(Config::instance()->character());
+		// Set window properties
+		this->setCursor(Qt::PointingHandCursor);
+		this->alwaysOnTop(Config::instance()->alwaysOnTop());
 		// Set window position
 		QPoint config_pos = Config::instance()->position();
 		if(config_pos.x() < 0 || config_pos.y() < 0){
@@ -36,10 +46,12 @@ namespace MCA{
 			this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
 		}else
 			this->move(config_pos);
-		// Set window properties
-		this->setWindowIcon(QICON(logo_ico));	// In use by child windows
-		this->setCursor(Qt::PointingHandCursor);
-		this->alwaysOnTop(Config::instance()->alwaysOnTop());
+	}
+
+	void AvatarWindow::loadCharacter(QString name){
+		if(!this->character.set(name))
+			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!").arg(this->character.name()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
+		this->setPixmap(QPixmap::fromImage(this->character.idle()));
 	}
 
 	void AvatarWindow::alwaysOnTop(bool on){
@@ -56,7 +68,7 @@ namespace MCA{
 	}
 
 	void AvatarWindow::closeEvent(QCloseEvent* event){
-		QWidget::closeEvent(event);
+		QLabel::closeEvent(event);
 		QCoreApplication::instance()->quit();
 	}
 

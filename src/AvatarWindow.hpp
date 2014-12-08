@@ -15,11 +15,13 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QLabel>
+#include "Character.hpp"
 
 namespace MCA{
-	class AvatarWindow : public QWidget{
+	class AvatarWindow : public QLabel{
 		private:
+			Character character;
 			QPoint mouse_press_pos;
 		protected:
 			void closeEvent(QCloseEvent* event) override;
@@ -27,6 +29,7 @@ namespace MCA{
 			void mouseMoveEvent(QMouseEvent* event) override;
 		public:
 			AvatarWindow(void);
+			void loadCharacter(QString name);
 			void alwaysOnTop(bool on);
 	};
 }

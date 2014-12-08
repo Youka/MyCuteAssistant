@@ -21,10 +21,15 @@ Permission is granted to anyone to use this software for any purpose, including 
 namespace MCA{
 	class Character{
 		private:
-			QImage idle;
+			QString id;
+			QImage idle_image;
 		public:
 			static QStringList possibleNames();
+			Character() = default;
 			Character(QString name);
+			bool set(QString name);
+			QString& name();
+			QImage& idle();
 			bool allLoaded();
 	};
 }
