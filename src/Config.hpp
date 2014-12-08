@@ -32,5 +32,7 @@ namespace MCA{
 			void hotkey(QString keys);
 			QPoint position();
 			void position(QPoint pos);
+			QString character();
+			void character(QString name);
 	};
 }

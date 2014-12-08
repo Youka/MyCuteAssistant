@@ -20,5 +20,5 @@ add_subdirectory(docs)
 message(STATUS "Finished documents")
 
 # Process characters
-add_subdirectory(characters)
+add_subdirectory(chars)
 message(STATUS "Finished characters")
