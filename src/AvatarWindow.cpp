@@ -43,9 +43,9 @@ namespace MCA{
 		// Set window position
 		QPoint config_pos = Config::instance()->position();
 		if(config_pos.x() < 0 || config_pos.y() < 0){
-			QRect desktop_geometry = QApplication::desktop()->availableGeometry();
-			this->adjustSize();
-			this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
+			QRect widget_geometry = this->geometry();
+			widget_geometry.moveBottomRight(QApplication::desktop()->availableGeometry().bottomRight());	// Desktop: bottom-right
+			this->setGeometry(widget_geometry);
 		}else
 			this->move(config_pos);
 	}
@@ -54,6 +54,7 @@ namespace MCA{
 		if(!this->character.set(name))
 			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!").arg(this->character.name()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
 		this->setPixmap(QPixmap::fromImage(this->character.idle()));
+		this->adjustSize();
 	}
 
 	void AvatarWindow::alwaysOnTop(bool on){
