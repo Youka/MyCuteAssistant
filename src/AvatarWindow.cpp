@@ -39,10 +39,12 @@ namespace MCA{
 		// Set window properties
 		this->setCursor(Qt::PointingHandCursor);
 		this->alwaysOnTop(Config::instance()->alwaysOnTop());
+		this->setWindowOpacity(Config::instance()->opacity() / 255.0);
 		// Set window position
 		QPoint config_pos = Config::instance()->position();
 		if(config_pos.x() < 0 || config_pos.y() < 0){
 			QRect desktop_geometry = QApplication::desktop()->availableGeometry();
+			this->adjustSize();
 			this->move(desktop_geometry.right() - this->width(), desktop_geometry.bottom() - this->height());	// Desktop: bottom-right
 		}else
 			this->move(config_pos);

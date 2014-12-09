@@ -39,6 +39,20 @@ namespace MCA{
 		this->setValue("Window/alwaysOnTop", on);
 	}
 
+	QString Config::character(){
+		return this->value("Window/character", "default").toString();
+	}
+	void Config::character(QString name){
+		this->setValue("Window/character", name);
+	}
+
+	unsigned char Config::opacity(){
+		return this->value("Window/opacity", 255).toUInt();
+	}
+	void Config::opacity(unsigned char strength){
+		this->setValue("Window/opacity", strength);
+	}
+
 	QString Config::hotkey(){
 		return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
 	}
@@ -52,12 +66,5 @@ namespace MCA{
 	void Config::position(QPoint pos){
 		this->setValue("Window/x", pos.x());
 		this->setValue("Window/y", pos.y());
-	}
-
-	QString Config::character(){
-		return this->value("Global/character", "default").toString();
-	}
-	void Config::character(QString name){
-		this->setValue("Global/character", name);
 	}
 }

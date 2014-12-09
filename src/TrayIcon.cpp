@@ -17,6 +17,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "resources.h"
 #include <QtWidgets/QMenu>
 #include "Config.hpp"
+#include <QtWidgets/QWidgetAction>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QInputDialog>
 #include "AboutDialog.hpp"
 #include "config.h"
@@ -27,6 +29,7 @@ IMPORT_RESOURCE_FILE(show_hide_png)
 IMPORT_RESOURCE_FILE(custom_png)
 IMPORT_RESOURCE_FILE(characters_png)
 IMPORT_RESOURCE_FILE(character_png)
+IMPORT_RESOURCE_FILE(opacity_png)
 IMPORT_RESOURCE_FILE(hotkey_png)
 IMPORT_RESOURCE_FILE(about_png)
 IMPORT_RESOURCE_FILE(bye_png)
@@ -58,6 +61,21 @@ namespace MCA{
 			parent->loadCharacter(action->text());
 			Config::instance()->character(action->text());
 		});
+		QMenu* tray_menu_custom_menu_opacity = tray_menu_custom_menu->addMenu(QICON(opacity_png), "Buhuhuu");
+		QSlider* opacity_slider = new QSlider;
+		opacity_slider->setOrientation(Qt::Horizontal);
+		opacity_slider->setMinimum(0);
+		opacity_slider->setMaximum(255);
+		opacity_slider->setSingleStep(1);
+		opacity_slider->setPageStep(64);
+		opacity_slider->setValue(Config::instance()->opacity());
+		QObject::connect(opacity_slider, &QAbstractSlider::valueChanged, [parent](int slider_value){
+			parent->setWindowOpacity(slider_value / 255.0);
+			Config::instance()->opacity(slider_value);
+		});
+		QWidgetAction* opacity_slider_menu_item = new QWidgetAction(tray_menu_custom_menu_opacity);
+		opacity_slider_menu_item->setDefaultWidget(opacity_slider);
+		tray_menu_custom_menu_opacity->addAction(opacity_slider_menu_item);
 		QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me:"),	// Set dynamically (see below)
 			*tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
 		QObject::connect(tray_menu_hotkey, &QAction::triggered, [parent,this](){

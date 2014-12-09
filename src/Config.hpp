@@ -28,11 +28,13 @@ namespace MCA{
 			// Settings
 			bool alwaysOnTop();
 			void alwaysOnTop(bool on);
+			QString character();
+			void character(QString name);
+			unsigned char opacity();
+			void opacity(unsigned char strength);
 			QString hotkey();
 			void hotkey(QString keys);
 			QPoint position();
 			void position(QPoint pos);
-			QString character();
-			void character(QString name);
 	};
 }
