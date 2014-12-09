@@ -39,8 +39,7 @@ namespace MCA{
 		// Add tray icon menu
 		QMenu* tray_menu = new QMenu(parent);
 		QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), ""),	// Set dynamically (see further down)
-			*tray_menu_on_top = new QAction(tray_menu);
-		tray_menu_on_top->setText("Jiiiiiii...");
+			*tray_menu_on_top = new QAction("Jiiiiiii...", tray_menu);
 		tray_menu_on_top->setCheckable(true);
 		tray_menu_on_top->setChecked(Config::instance()->alwaysOnTop());
 		QObject::connect(tray_menu_on_top, &QAction::toggled, [parent](bool checked){
@@ -62,8 +61,7 @@ namespace MCA{
 			Config::instance()->character(action->text());
 		});
 		QMenu* tray_menu_custom_menu_opacity = tray_menu_custom_menu->addMenu(QICON(opacity_png), "Buhuhuu");
-		QSlider* opacity_slider = new QSlider;
-		opacity_slider->setOrientation(Qt::Horizontal);
+		QSlider* opacity_slider = new QSlider(Qt::Horizontal);
 		opacity_slider->setMinimum(0);
 		opacity_slider->setMaximum(255);
 		opacity_slider->setSingleStep(1);
@@ -77,9 +75,8 @@ namespace MCA{
 		opacity_slider_menu_item->setDefaultWidget(opacity_slider);
 		tray_menu_custom_menu_opacity->addAction(opacity_slider_menu_item);
 		QMenu* tray_menu_hotkey = tray_menu->addMenu(QICON(hotkey_png), "Call me:");
-		QLineEdit* hotkey_edit = new QLineEdit;
+		QLineEdit* hotkey_edit = new QLineEdit(Config::instance()->hotkey());
 		hotkey_edit->setToolTip("Separate keys by '|'. Modifiers: SHIFT,CTRL,ALT.");
-		hotkey_edit->setText(Config::instance()->hotkey());
 		QObject::connect(hotkey_edit, &QLineEdit::returnPressed, [hotkey_edit,this](){
 			GlobalHotkey new_hotkey(hotkey_edit->text(), std::bind(TrayIcon::dbClick, this));
 			if(new_hotkey.isOk()){
