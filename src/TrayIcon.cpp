@@ -18,6 +18,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QMenu>
 #include "Config.hpp"
 #include <QtWidgets/QWidgetAction>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QLineEdit>
 #include "AboutDialog.hpp"
@@ -28,7 +29,6 @@ IMPORT_RESOURCE_FILE(logo_ico)
 IMPORT_RESOURCE_FILE(show_hide_png)
 IMPORT_RESOURCE_FILE(custom_png)
 IMPORT_RESOURCE_FILE(characters_png)
-IMPORT_RESOURCE_FILE(character_png)
 IMPORT_RESOURCE_FILE(opacity_png)
 IMPORT_RESOURCE_FILE(hotkey_png)
 IMPORT_RESOURCE_FILE(about_png)
@@ -48,20 +48,24 @@ namespace MCA{
 		});
 		tray_menu->addAction(tray_menu_on_top);
 		tray_menu->addSeparator();
-		QMenu* tray_menu_custom_menu = tray_menu->addMenu(QICON(custom_png), "Huh?");
-		QMenu* tray_menu_custom_menu_characters = tray_menu_custom_menu->addMenu(QICON(characters_png), "Who?");
-		QObject::connect(tray_menu_custom_menu_characters, &QMenu::aboutToShow, [tray_menu_custom_menu_characters](){
+		QMenu* tray_menu_custom_menu = tray_menu->addMenu(QICON(custom_png), "Huh?"),
+			*tray_menu_custom_menu_characters = tray_menu_custom_menu->addMenu(QICON(characters_png), "Who?");
+		QObject::connect(tray_menu_custom_menu_characters, &QMenu::aboutToShow, [tray_menu_custom_menu_characters,parent](){
 			tray_menu_custom_menu_characters->clear();
-			QStringList characters = Character::possibleNames();
-			for(QString& character : characters)
-				tray_menu_custom_menu_characters->addAction(QICON(character_png), character);
-		});
-		QObject::connect(tray_menu_custom_menu_characters, &QMenu::triggered, [parent](QAction* action){
-			parent->loadCharacter(action->text());
-			Config::instance()->character(action->text());
+			QListWidget* chars_list = new QListWidget;
+			chars_list->setToolTip("Choose one of all available characters!");
+			chars_list->addItems(Character::possibleNames());
+			QObject::connect(chars_list, &QListWidget::itemActivated, [parent](QListWidgetItem* item){
+				parent->loadCharacter(item->text());
+				Config::instance()->character(item->text());
+			});
+			QWidgetAction* char_select_menu_item = new QWidgetAction(tray_menu_custom_menu_characters);
+			char_select_menu_item->setDefaultWidget(chars_list);
+			tray_menu_custom_menu_characters->addAction(char_select_menu_item);
 		});
 		QMenu* tray_menu_custom_menu_opacity = tray_menu_custom_menu->addMenu(QICON(opacity_png), "Buhuhuu");
 		QSlider* opacity_slider = new QSlider(Qt::Horizontal);
+		opacity_slider->setToolTip("Left: transparent <-> Right: opaque");
 		opacity_slider->setMinimum(0);
 		opacity_slider->setMaximum(255);
 		opacity_slider->setSingleStep(1);
