@@ -23,25 +23,36 @@ namespace MCA{
 	}
 
 	Character::Character(QString name){
-		this->set(name);
+		this->load(name);
 	}
 
-	bool Character::set(QString name){
+	bool Character::load(QString name){
 		this->id = name;
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
-		this->idle_image.load(char_dir + "/idle.png", "PNG");
+		this->idle.load(char_dir + "/idle.png", "PNG");
 		return this->allLoaded();
 	}
 
-	QString& Character::name(){
+	QString Character::name() const{
 		return this->id;
 	}
 
-	QImage& Character::idle(){
-		return this->idle_image;
+	Character::ActiveType Character::active() const{
+		return this->m_active;
+	}
+
+	void Character::active(Character::ActiveType type){
+		this->m_active = type;
+	}
+
+	QImage Character::currentImage(){
+		switch(this->m_active){
+			case Character::ActiveType::IDLE: return this->idle;
+		}
+		return QImage();
 	}
 
 	bool Character::allLoaded(){
-		return !this->idle_image.isNull();
+		return !this->idle.isNull();
 	}
 }

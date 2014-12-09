@@ -15,21 +15,26 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #pragma once
 
-#include <QtGui/QImage>
 #include <QtCore/QStringList>
+#include <QtGui/QImage>
 
 namespace MCA{
 	class Character{
-		private:
-			QString id;
-			QImage idle_image;
 		public:
 			static QStringList possibleNames();
+			enum class ActiveType : unsigned char{IDLE = 0};
+		private:
+			QString id;
+			QImage idle;
+			ActiveType m_active = ActiveType::IDLE;
+		public:
 			Character() = default;
 			Character(QString name);
-			bool set(QString name);
-			QString& name();
-			QImage& idle();
+			bool load(QString name);
+			QString name() const;
+			ActiveType active() const;
+			void active(ActiveType type);
+			QImage currentImage();
 			bool allLoaded();
 	};
 }

@@ -51,9 +51,9 @@ namespace MCA{
 	}
 
 	void AvatarWindow::loadCharacter(QString name){
-		if(!this->character.set(name))
+		if(!this->character.load(name))
 			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!").arg(this->character.name()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
-		this->setPixmap(QPixmap::fromImage(this->character.idle()));
+		this->setPixmap(QPixmap::fromImage(this->character.currentImage()));
 		this->adjustSize();
 	}
 
