@@ -19,7 +19,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "Config.hpp"
 #include <QtWidgets/QWidgetAction>
 #include <QtWidgets/QSlider>
-#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QLineEdit>
 #include "AboutDialog.hpp"
 #include "config.h"
 
@@ -38,8 +38,8 @@ namespace MCA{
 	TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), std::bind(TrayIcon::dbClick, this)){
 		// Add tray icon menu
 		QMenu* tray_menu = new QMenu(parent);
-		QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), ""),	// Set dynamically (see below)
-			*tray_menu_on_top = new QAction(tray_menu);	// Set dynamically (see below)
+		QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), ""),	// Set dynamically (see further down)
+			*tray_menu_on_top = new QAction(tray_menu);
 		tray_menu_on_top->setText("Jiiiiiii...");
 		tray_menu_on_top->setCheckable(true);
 		tray_menu_on_top->setChecked(Config::instance()->alwaysOnTop());
@@ -76,19 +76,25 @@ namespace MCA{
 		QWidgetAction* opacity_slider_menu_item = new QWidgetAction(tray_menu_custom_menu_opacity);
 		opacity_slider_menu_item->setDefaultWidget(opacity_slider);
 		tray_menu_custom_menu_opacity->addAction(opacity_slider_menu_item);
-		QAction* tray_menu_hotkey = tray_menu->addAction(QICON(hotkey_png), "Call me:"),	// Set dynamically (see below)
-			*tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
-		QObject::connect(tray_menu_hotkey, &QAction::triggered, [parent,this](){
-			QString new_keys = QInputDialog::getText(parent, QString(APP_NAME) + " - Hotkey", "Define my hotkey!\nKeys are separated by '|'.\nModifiers: ALT, CTRL, SHIFT.", QLineEdit::Normal, Config::instance()->hotkey(), nullptr, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint);
-			if(!new_keys.isEmpty()){
-				GlobalHotkey new_hotkey(new_keys, std::bind(TrayIcon::dbClick, this));
-				if(new_hotkey.isOk()){
-					this->hotkey = std::move(new_hotkey);
-					Config::instance()->hotkey(new_keys);
-				}else
-					this->showMessage(APP_NAME, "Invalid hotkey!", QSystemTrayIcon::Information, 5000);
+		QMenu* tray_menu_hotkey = tray_menu->addMenu(QICON(hotkey_png), "Call me:");
+		QLineEdit* hotkey_edit = new QLineEdit;
+		hotkey_edit->setToolTip("Separate keys by '|'. Modifiers: SHIFT,CTRL,ALT.");
+		hotkey_edit->setText(Config::instance()->hotkey());
+		QObject::connect(hotkey_edit, &QLineEdit::returnPressed, [hotkey_edit,this](){
+			GlobalHotkey new_hotkey(hotkey_edit->text(), std::bind(TrayIcon::dbClick, this));
+			if(new_hotkey.isOk()){
+				hotkey_edit->selectAll();
+				this->hotkey = std::move(new_hotkey);
+				Config::instance()->hotkey(hotkey_edit->text());
+			}else{
+				this->showMessage(APP_NAME, "Invalid hotkey!", QSystemTrayIcon::Information, 5000);
+				hotkey_edit->setText(Config::instance()->hotkey());
 			}
 		});
+		QWidgetAction* hotkey_edit_menu_item = new QWidgetAction(tray_menu_hotkey);
+		hotkey_edit_menu_item->setDefaultWidget(hotkey_edit);
+		tray_menu_hotkey->addAction(hotkey_edit_menu_item);
+		QAction* tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
 		QObject::connect(tray_menu_about, &QAction::triggered, [parent](){
 			AboutDialog(parent).exec();
 		});
