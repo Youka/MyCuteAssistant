@@ -30,7 +30,7 @@ namespace MCA{
 		public:
 			AvatarWindow(void);
 			void loadCharacter(QString name);
-			void loadCharacter();
+			void loadCharacter(void);
 			void alwaysOnTop(bool on);
 	};
 }

@@ -23,11 +23,11 @@ class GlobalHotkey{
 		int id;
 		QAbstractNativeEventFilter* filter;
 	public:
-		GlobalHotkey(QString keys, std::function<void()> receiver);
+		GlobalHotkey(QString keys, std::function<void(void)> receiver);
 		~GlobalHotkey(void);
 		GlobalHotkey(const GlobalHotkey& o) = delete;
 		GlobalHotkey(GlobalHotkey&& o);
 		const GlobalHotkey& operator=(const GlobalHotkey& o) = delete;
 		const GlobalHotkey& operator=(GlobalHotkey&& o);
-		bool isOk() const;
+		bool isOk(void) const;
 };

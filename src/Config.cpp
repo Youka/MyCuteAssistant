@@ -18,7 +18,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 namespace MCA{
 	static QAtomicPointer<Config> inst = nullptr;
-	Config* Config::instance(){
+	Config* Config::instance(void){
 		return inst;
 	}
 
@@ -32,42 +32,42 @@ namespace MCA{
 			inst = nullptr;
 	}
 
-	bool Config::alwaysOnTop(){
+	bool Config::alwaysOnTop(void){
 		return this->value("Window/alwaysOnTop", false).toBool();
 	}
 	void Config::alwaysOnTop(bool on){
 		this->setValue("Window/alwaysOnTop", on);
 	}
 
-	QString Config::character(){
+	QString Config::character(void){
 		return this->value("Window/character", "default").toString();
 	}
 	void Config::character(QString name){
 		this->setValue("Window/character", name);
 	}
 
-	unsigned char Config::opacity(){
+	unsigned char Config::opacity(void){
 		return this->value("Window/opacity", 255).toUInt();
 	}
 	void Config::opacity(unsigned char strength){
 		this->setValue("Window/opacity", strength);
 	}
 
-	unsigned short Config::size(){
+	unsigned short Config::size(void){
 		return this->value("Window/size", 100).toUInt();
 	}
 	void Config::size(unsigned short pct){
 		this->setValue("Window/size", pct);
 	}
 
-	QString Config::hotkey(){
+	QString Config::hotkey(void){
 		return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
 	}
 	void Config::hotkey(QString keys){
 		this->setValue("Global/hotkey", keys);
 	}
 
-	QPoint Config::position(){
+	QPoint Config::position(void){
 		return QPoint(this->value("Window/x", -1).toInt(), this->value("Window/y", -1).toInt());
 	}
 	void Config::position(QPoint pos){

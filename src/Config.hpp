@@ -22,21 +22,21 @@ namespace MCA{
 	class Config : protected QSettings{
 		public:
 			// Object managment
-			static Config* instance();
+			static Config* instance(void);
 			Config(QString filename);
 			~Config(void);
 			// Settings
-			bool alwaysOnTop();
+			bool alwaysOnTop(void);
 			void alwaysOnTop(bool on);
-			QString character();
+			QString character(void);
 			void character(QString name);
-			unsigned char opacity();
+			unsigned char opacity(void);
 			void opacity(unsigned char strength);
-			unsigned short size();
+			unsigned short size(void);
 			void size(unsigned short pct);
-			QString hotkey();
+			QString hotkey(void);
 			void hotkey(QString keys);
-			QPoint position();
+			QPoint position(void);
 			void position(QPoint pos);
 	};
 }

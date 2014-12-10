@@ -21,6 +21,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "resources.h"
 #include <QtGui/QIcon>
 #include "Config.hpp"
+#include <memory>
 #include <QtGui/QMouseEvent>
 #ifdef _WIN32
 #include <windows.h>
@@ -55,10 +56,22 @@ namespace MCA{
 			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!").arg(this->character.name()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
 		this->loadCharacter();
 	}
-	void AvatarWindow::loadCharacter(){
-		QImage image = this->character.currentImage();
+	void AvatarWindow::loadCharacter(void){
+		QMovie& movie = this->character.currentImage();
 		unsigned short size = Config::instance()->size();
-		this->setPixmap(QPixmap::fromImage(size == 100 ? image : image.scaled(image.width() * size / 100, image.height() * size / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
+		if(movie.frameCount() == 1){
+			QPixmap pixmap(movie.fileName());
+			this->setPixmap(size == 100 ? pixmap : pixmap.scaled(pixmap.width() * size / 100, pixmap.height() * size / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		}else{
+			QMovie* movie_copy = new QMovie(movie.fileName(), QByteArray(), this);
+			if(size != 100){
+				movie_copy->jumpToFrame(0);
+				movie_copy->setScaledSize(movie_copy->currentImage().size() * size / 100);
+			}
+			std::unique_ptr<QMovie>(this->movie());
+			this->setMovie(movie_copy);
+			movie_copy->start();
+		}
 		this->adjustSize();
 	}
 

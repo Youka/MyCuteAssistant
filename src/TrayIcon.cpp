@@ -52,7 +52,7 @@ namespace MCA{
 		tray_menu->addSeparator();
 		QMenu* tray_menu_custom_menu = tray_menu->addMenu(QICON(custom_png), "Huh?"),
 			*tray_menu_custom_menu_characters = tray_menu_custom_menu->addMenu(QICON(characters_png), "Who?");
-		QObject::connect(tray_menu_custom_menu_characters, &QMenu::aboutToShow, [tray_menu_custom_menu_characters,parent](){
+		QObject::connect(tray_menu_custom_menu_characters, &QMenu::aboutToShow, [tray_menu_custom_menu_characters,parent](void){
 			tray_menu_custom_menu_characters->clear();
 			QListWidget* chars_list = new QListWidget;
 			chars_list->setToolTip("Choose one of all available characters!");
@@ -104,7 +104,7 @@ namespace MCA{
 		QMenu* tray_menu_hotkey = tray_menu->addMenu(QICON(hotkey_png), "Call me:");
 		QLineEdit* hotkey_edit = new QLineEdit(Config::instance()->hotkey());
 		hotkey_edit->setToolTip("Separate keys by '|'. Modifiers: SHIFT,CTRL,ALT.");
-		QObject::connect(hotkey_edit, &QLineEdit::returnPressed, [hotkey_edit,this](){
+		QObject::connect(hotkey_edit, &QLineEdit::returnPressed, [hotkey_edit,this](void){
 			GlobalHotkey new_hotkey(hotkey_edit->text(), std::bind(TrayIcon::dbClick, this));
 			if(new_hotkey.isOk()){
 				hotkey_edit->selectAll();
@@ -119,7 +119,7 @@ namespace MCA{
 		hotkey_edit_menu_item->setDefaultWidget(hotkey_edit);
 		tray_menu_hotkey->addAction(hotkey_edit_menu_item);
 		QAction* tray_menu_about = tray_menu->addAction(QICON(about_png), "I'm...");
-		QObject::connect(tray_menu_about, &QAction::triggered, [parent](){
+		QObject::connect(tray_menu_about, &QAction::triggered, [parent](void){
 			AboutDialog(parent).exec();
 		});
 		tray_menu->addSeparator();

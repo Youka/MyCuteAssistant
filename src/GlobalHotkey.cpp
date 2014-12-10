@@ -20,9 +20,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 class NativeEventFilter : public QAbstractNativeEventFilter{
 	private:
-		std::function<void()> receiver;
+		std::function<void(void)> receiver;
 	public:
-		NativeEventFilter(std::function<void()> receiver) : receiver(receiver){}
+		NativeEventFilter(std::function<void(void)> receiver) : receiver(receiver){}
 		virtual bool isHotkey(void* message) = 0;
 		bool nativeEventFilter(const QByteArray&, void* message, long*) override{
 			if(this->isHotkey(message))
@@ -38,7 +38,7 @@ class WinEventFilter : public NativeEventFilter{
 	private:
 		UINT mods, vk;
 	public:
-		WinEventFilter(UINT mods, UINT vk, std::function<void()> receiver) : NativeEventFilter(receiver), mods(mods), vk(vk){}
+		WinEventFilter(UINT mods, UINT vk, std::function<void(void)> receiver) : NativeEventFilter(receiver), mods(mods), vk(vk){}
 		bool isHotkey(void* message) override{
 			MSG* msg = reinterpret_cast<MSG*>(message);
 			return msg->message == WM_HOTKEY && LOWORD(msg->lParam) == this->mods && HIWORD(msg->lParam) == this->vk;
@@ -97,6 +97,6 @@ const GlobalHotkey& GlobalHotkey::operator=(GlobalHotkey&& o){
 	return *this;
 }
 
-bool GlobalHotkey::isOk() const{
+bool GlobalHotkey::isOk(void) const{
 	return this->filter;
 }

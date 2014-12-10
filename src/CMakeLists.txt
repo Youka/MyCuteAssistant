@@ -99,6 +99,7 @@ message(STATUS "Executable with following sources: ${SOURCES}")
 if(WIN32)
 	target_link_libraries(${PROJECT_NAME}
 		qico
+		qmng
 		qwindows
 		Qt5PlatformSupport
 		Qt5Widgets

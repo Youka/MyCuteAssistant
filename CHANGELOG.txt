@@ -4,7 +4,6 @@ General:
 - Speech API
 - draw icons
 - bubble interaction
-- expand customization menu (opacity, size)
 
 Unix:
 - Qt linkage

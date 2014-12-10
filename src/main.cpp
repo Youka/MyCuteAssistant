@@ -22,6 +22,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtCore/QtPlugin>
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 Q_IMPORT_PLUGIN(QICOPlugin)
+Q_IMPORT_PLUGIN(QMngPlugin)
 #endif
 
 // Program entry

@@ -16,25 +16,25 @@ Permission is granted to anyone to use this software for any purpose, including 
 #pragma once
 
 #include <QtCore/QStringList>
-#include <QtGui/QImage>
+#include <QtGui/QMovie>
 
 namespace MCA{
 	class Character{
 		public:
-			static QStringList possibleNames();
+			static QStringList possibleNames(void);
 			enum class ActiveType : unsigned char{IDLE = 0};
 		private:
 			QString id;
-			QImage idle;
+			QMovie idle, null;
 			ActiveType m_active = ActiveType::IDLE;
 		public:
-			Character() = default;
+			Character(void) = default;
 			Character(QString name);
 			bool load(QString name);
-			QString name() const;
-			ActiveType active() const;
+			QString name(void) const;
+			ActiveType active(void) const;
 			void active(ActiveType type);
-			QImage currentImage();
-			bool allLoaded();
+			QMovie& currentImage(void);
+			bool allLoaded(void);
 	};
 }

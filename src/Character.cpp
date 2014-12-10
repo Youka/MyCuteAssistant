@@ -18,7 +18,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtCore/QDir>
 
 namespace MCA{
-	QStringList Character::possibleNames(){
+	QStringList Character::possibleNames(void){
 		return QDir(QCoreApplication::applicationDirPath() + "/chars").entryList(QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 	}
 
@@ -29,15 +29,15 @@ namespace MCA{
 	bool Character::load(QString name){
 		this->id = name;
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
-		this->idle.load(char_dir + "/idle.png", "PNG");
+		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.mng");
 		return this->allLoaded();
 	}
 
-	QString Character::name() const{
+	QString Character::name(void) const{
 		return this->id;
 	}
 
-	Character::ActiveType Character::active() const{
+	Character::ActiveType Character::active(void) const{
 		return this->m_active;
 	}
 
@@ -45,14 +45,14 @@ namespace MCA{
 		this->m_active = type;
 	}
 
-	QImage Character::currentImage(){
+	QMovie& Character::currentImage(void){
 		switch(this->m_active){
 			case Character::ActiveType::IDLE: return this->idle;
 		}
-		return QImage();
+		return this->null;
 	}
 
-	bool Character::allLoaded(){
-		return !this->idle.isNull();
+	bool Character::allLoaded(void){
+		return this->idle.isValid();
 	}
 }
