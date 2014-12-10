@@ -22,10 +22,10 @@ namespace MCA{
 	class Character{
 		public:
 			static QStringList possibleNames(void);
-			enum class ActiveType : unsigned char{IDLE = 0};
+			enum class ActiveType : unsigned char{IDLE = 0, MOVE};
 		private:
 			QString id;
-			QMovie idle, null;
+			QMovie idle, move, null;
 			ActiveType m_active = ActiveType::IDLE;
 		public:
 			Character(void) = default;

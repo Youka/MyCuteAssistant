@@ -17,12 +17,14 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtWidgets/QLabel>
 #include "Character.hpp"
+#include <QtCore/QTimer>
 
 namespace MCA{
 	class AvatarWindow : public QLabel{
 		private:
 			Character character;
 			QPoint mouse_press_pos;
+			QTimer idle_timer;
 		protected:
 			void closeEvent(QCloseEvent* event) override;
 			void mousePressEvent(QMouseEvent* event) override;

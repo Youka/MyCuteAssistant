@@ -37,6 +37,10 @@ namespace MCA{
 		// Set character image
 		this->setAttribute(Qt::WA_TranslucentBackground);
 		this->loadCharacter(Config::instance()->character());
+		QObject::connect(&this->idle_timer, &QTimer::timeout, [this](void){
+			this->character.active(Character::ActiveType::IDLE);
+			this->loadCharacter();
+		});
 		// Set window properties
 		this->setCursor(Qt::PointingHandCursor);
 		this->alwaysOnTop(Config::instance()->alwaysOnTop());
@@ -114,6 +118,11 @@ namespace MCA{
 			if(geometry.bottom() > desktop_geometry.bottom())
 				geometry.translate(0, desktop_geometry.bottom() - geometry.bottom());
 			this->setGeometry(geometry);
+			if(this->character.active() != Character::ActiveType::MOVE){
+				this->character.active(Character::ActiveType::MOVE);
+				this->loadCharacter();
+			}
+			this->idle_timer.start(100);
 			Config::instance()->position(this->pos());
 		}
 	}

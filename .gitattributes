@@ -16,6 +16,7 @@
 # Images
 *.ico		binary
 *.png		binary
+*.mng		binary
 
 # Source code
 *.hpp		diff=cpp

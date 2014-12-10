@@ -30,6 +30,7 @@ namespace MCA{
 		this->id = name;
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
 		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.mng");
+		this->move.setFileName(char_dir + "/move.png"); if(!this->move.isValid()) this->move.setFileName(char_dir + "/move.mng");
 		return this->allLoaded();
 	}
 
@@ -48,11 +49,12 @@ namespace MCA{
 	QMovie& Character::currentImage(void){
 		switch(this->m_active){
 			case Character::ActiveType::IDLE: return this->idle;
+			case Character::ActiveType::MOVE: return this->move;
 		}
 		return this->null;
 	}
 
 	bool Character::allLoaded(void){
-		return this->idle.isValid();
+		return this->idle.isValid() && this->move.isValid();
 	}
 }
