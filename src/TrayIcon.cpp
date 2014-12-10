@@ -20,6 +20,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QWidgetAction>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include "AboutDialog.hpp"
 #include "config.h"
@@ -30,6 +31,7 @@ IMPORT_RESOURCE_FILE(show_hide_png)
 IMPORT_RESOURCE_FILE(custom_png)
 IMPORT_RESOURCE_FILE(characters_png)
 IMPORT_RESOURCE_FILE(opacity_png)
+IMPORT_RESOURCE_FILE(size_png)
 IMPORT_RESOURCE_FILE(hotkey_png)
 IMPORT_RESOURCE_FILE(about_png)
 IMPORT_RESOURCE_FILE(bye_png)
@@ -78,6 +80,27 @@ namespace MCA{
 		QWidgetAction* opacity_slider_menu_item = new QWidgetAction(tray_menu_custom_menu_opacity);
 		opacity_slider_menu_item->setDefaultWidget(opacity_slider);
 		tray_menu_custom_menu_opacity->addAction(opacity_slider_menu_item);
+                QMenu* tray_menu_custom_menu_size = tray_menu_custom_menu->addMenu(QICON(size_png), "*Shudder*");
+		QComboBox* size_selection = new QComboBox;
+		size_selection->setToolTip("Character size in percent.");
+		size_selection->addItem("25%");
+		size_selection->addItem("50%");
+		size_selection->addItem("75%");
+		size_selection->addItem("100%");
+		size_selection->addItem("125%");
+		size_selection->addItem("150%");
+		size_selection->addItem("175%");
+		size_selection->addItem("200%");
+		size_selection->addItem("250%");
+		size_selection->addItem("300%");
+		size_selection->setCurrentText(QString("%1%").arg(Config::instance()->size()));
+		QObject::connect(size_selection, &QComboBox::currentTextChanged, [parent](const QString& text){
+			Config::instance()->size(text.left(text.size()-1).toUInt());
+			parent->loadCharacter();
+		});
+		QWidgetAction* size_selection_menu_item = new QWidgetAction(tray_menu_custom_menu_size);
+		size_selection_menu_item->setDefaultWidget(size_selection);
+		tray_menu_custom_menu_size->addAction(size_selection_menu_item);
 		QMenu* tray_menu_hotkey = tray_menu->addMenu(QICON(hotkey_png), "Call me:");
 		QLineEdit* hotkey_edit = new QLineEdit(Config::instance()->hotkey());
 		hotkey_edit->setToolTip("Separate keys by '|'. Modifiers: SHIFT,CTRL,ALT.");

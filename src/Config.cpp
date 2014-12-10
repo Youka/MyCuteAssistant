@@ -53,6 +53,13 @@ namespace MCA{
 		this->setValue("Window/opacity", strength);
 	}
 
+	unsigned short Config::size(){
+		return this->value("Window/size", 100).toUInt();
+	}
+	void Config::size(unsigned short pct){
+		this->setValue("Window/size", pct);
+	}
+
 	QString Config::hotkey(){
 		return this->value("Global/hotkey", "CTRL|ALT|Y").toString();
 	}

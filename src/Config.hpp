@@ -32,6 +32,8 @@ namespace MCA{
 			void character(QString name);
 			unsigned char opacity();
 			void opacity(unsigned char strength);
+			unsigned short size();
+			void size(unsigned short pct);
 			QString hotkey();
 			void hotkey(QString keys);
 			QPoint position();
