@@ -29,8 +29,8 @@ namespace MCA{
 	bool Character::load(QString name){
 		this->id = name;
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
-		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.mng");
-		this->move.setFileName(char_dir + "/move.png"); if(!this->move.isValid()) this->move.setFileName(char_dir + "/move.mng");
+		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.gif");
+		this->move.setFileName(char_dir + "/move.png"); if(!this->move.isValid()) this->move.setFileName(char_dir + "/move.gif");
 		return this->allLoaded();
 	}
 
