@@ -67,7 +67,7 @@ namespace MCA{
 		QMovie& movie = this->character.currentImage();
 		unsigned short size = Config::instance()->size();
 		// Single image
-		if(movie.frameCount() == 1){
+		if(movie.frameCount() < 2){
 			// Cache & read first movie frame
 			movie.jumpToFrame(0);
 			QPixmap pixmap = movie.currentPixmap();

@@ -16,6 +16,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "Character.hpp"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
+#include <QtCore/QSettings>
 
 namespace MCA{
 	QStringList Character::possibleNames(void){
@@ -29,9 +30,19 @@ namespace MCA{
 	bool Character::load(QString name){
 		this->id = name;
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
-		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.gif");
-		this->move.setFileName(char_dir + "/move.png"); if(!this->move.isValid()) this->move.setFileName(char_dir + "/move.gif");
-		return this->errorString().isEmpty();
+		QStringList error_list;
+		QSettings properties(char_dir + "/properties.ini", QSettings::IniFormat, nullptr);
+		if(properties.status())
+			error_list << "Couldn't read properties!";
+		else{
+			this->idle.setFileName(char_dir + '/' + properties.value("Images/idle", "").toString());
+			if(!this->idle.isValid())
+				error_list << "Couldn't load idle image!";
+			this->move.setFileName(char_dir + '/' + properties.value("Images/move", "").toString());
+			if(!this->move.isValid())
+				error_list << "Couldn't load move image!";
+		}
+		return (this->error = error_list.join(' ')).isEmpty();
 	}
 
 	QString Character::name(void) const{
@@ -54,12 +65,7 @@ namespace MCA{
 		return this->null;
 	}
 
-	QString Character::errorString(void){
-		QStringList result;
-		if(!this->idle.isValid())
-			result << "Couldn't load idle image!";
-		else if(!this->move.isValid())
-			result << "Couldn't load move image!";
-		return result.join(' ');
+	QString Character::errorString(void) const{
+		return this->error;
 	}
 }

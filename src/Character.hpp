@@ -24,7 +24,7 @@ namespace MCA{
 			static QStringList possibleNames(void);
 			enum class State{IDLE, MOVE};
 		private:
-			QString id;
+			QString id, error;
 			QMovie idle, move, null;
 			State m_state = State::IDLE;
 		public:
@@ -35,6 +35,6 @@ namespace MCA{
 			State state(void) const;
 			void state(State current);
 			QMovie& currentImage(void);
-			QString errorString(void);
+			QString errorString(void) const;
 	};
 }
