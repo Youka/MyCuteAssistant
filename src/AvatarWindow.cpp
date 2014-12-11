@@ -61,21 +61,34 @@ namespace MCA{
 		this->loadCharacter();
 	}
 	void AvatarWindow::loadCharacter(void){
+		// Delete old movie of this window (prevent memory leak)
+		std::unique_ptr<QMovie>(this->movie());
+		// Collect relevant character data
 		QMovie& movie = this->character.currentImage();
 		unsigned short size = Config::instance()->size();
+		// Single image
 		if(movie.frameCount() == 1){
-			QPixmap pixmap(movie.fileName());
+			// Cache & read first movie frame
+			movie.jumpToFrame(0);
+			QPixmap pixmap = movie.currentPixmap();
+			// Set scaled frame to this window
 			this->setPixmap(size == 100 ? pixmap : pixmap.scaled(pixmap.width() * size / 100, pixmap.height() * size / 100, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		// Animation
 		}else{
+			// Create new movie instance, belonging to this window
 			QMovie* movie_copy = new QMovie(movie.fileName(), QByteArray(), this);
+			// Cache all frames (better solution for small, repeating animations)
+			movie_copy->setCacheMode(QMovie::CacheAll);
+			// Scale movie on need
 			if(size != 100){
 				movie_copy->jumpToFrame(0);
 				movie_copy->setScaledSize(movie_copy->currentImage().size() * size / 100);
 			}
-			std::unique_ptr<QMovie>(this->movie());
+			// Set movie to this window and start the animation
 			this->setMovie(movie_copy);
 			movie_copy->start();
 		}
+		// Set window size to new contents
 		this->adjustSize();
 	}
 
@@ -123,6 +136,11 @@ namespace MCA{
 				this->loadCharacter();
 			}
 			this->idle_timer.start(100);
+		}
+	}
+	void AvatarWindow::mouseReleaseEvent(QMouseEvent* event){
+		if(event->button() == Qt::LeftButton){
+			event->setAccepted(true);
 			Config::instance()->position(this->pos());
 		}
 	}
