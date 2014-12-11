@@ -22,19 +22,19 @@ namespace MCA{
 	class Character{
 		public:
 			static QStringList possibleNames(void);
-			enum class ActiveType : unsigned char{IDLE = 0, MOVE};
+			enum class State{IDLE, MOVE};
 		private:
 			QString id;
 			QMovie idle, move, null;
-			ActiveType m_active = ActiveType::IDLE;
+			State m_state = State::IDLE;
 		public:
 			Character(void) = default;
 			Character(QString name);
 			bool load(QString name);
 			QString name(void) const;
-			ActiveType active(void) const;
-			void active(ActiveType type);
+			State state(void) const;
+			void state(State current);
 			QMovie& currentImage(void);
-			bool allLoaded(void);
+			QString errorString(void);
 	};
 }

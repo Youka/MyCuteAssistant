@@ -31,30 +31,35 @@ namespace MCA{
 		QString char_dir = QCoreApplication::applicationDirPath() + "/chars/" + this->id;
 		this->idle.setFileName(char_dir + "/idle.png"); if(!this->idle.isValid()) this->idle.setFileName(char_dir + "/idle.gif");
 		this->move.setFileName(char_dir + "/move.png"); if(!this->move.isValid()) this->move.setFileName(char_dir + "/move.gif");
-		return this->allLoaded();
+		return this->errorString().isEmpty();
 	}
 
 	QString Character::name(void) const{
 		return this->id;
 	}
 
-	Character::ActiveType Character::active(void) const{
-		return this->m_active;
+	Character::State Character::state(void) const{
+		return this->m_state;
 	}
 
-	void Character::active(Character::ActiveType type){
-		this->m_active = type;
+	void Character::state(Character::State current){
+		this->m_state = current;
 	}
 
 	QMovie& Character::currentImage(void){
-		switch(this->m_active){
-			case Character::ActiveType::IDLE: return this->idle;
-			case Character::ActiveType::MOVE: return this->move;
+		switch(this->m_state){
+			case Character::State::IDLE: return this->idle;
+			case Character::State::MOVE: return this->move;
 		}
 		return this->null;
 	}
 
-	bool Character::allLoaded(void){
-		return this->idle.isValid() && this->move.isValid();
+	QString Character::errorString(void){
+		QStringList result;
+		if(!this->idle.isValid())
+			result << "Couldn't load idle image!";
+		else if(!this->move.isValid())
+			result << "Couldn't load move image!";
+		return result.join(' ');
 	}
 }

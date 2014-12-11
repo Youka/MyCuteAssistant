@@ -38,7 +38,7 @@ namespace MCA{
 		this->setAttribute(Qt::WA_TranslucentBackground);
 		this->loadCharacter(Config::instance()->character());
 		QObject::connect(&this->idle_timer, &QTimer::timeout, [this](void){
-			this->character.active(Character::ActiveType::IDLE);
+			this->character.state(Character::State::IDLE);
 			this->loadCharacter();
 		});
 		// Set window properties
@@ -57,7 +57,7 @@ namespace MCA{
 
 	void AvatarWindow::loadCharacter(QString name){
 		if(!this->character.load(name))
-			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!").arg(this->character.name()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
+			QMessageBox(QMessageBox::Warning, APP_NAME, QString("Couldn't load character '%1' completely!\n%2").arg(this->character.name(), this->character.errorString()), QMessageBox::Ok, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::MSWindowsFixedSizeDialogHint).exec();
 		this->loadCharacter();
 	}
 	void AvatarWindow::loadCharacter(void){
@@ -131,8 +131,8 @@ namespace MCA{
 			if(geometry.bottom() > desktop_geometry.bottom())
 				geometry.translate(0, desktop_geometry.bottom() - geometry.bottom());
 			this->setGeometry(geometry);
-			if(this->character.active() != Character::ActiveType::MOVE){
-				this->character.active(Character::ActiveType::MOVE);
+			if(this->character.state() != Character::State::MOVE){
+				this->character.state(Character::State::MOVE);
 				this->loadCharacter();
 			}
 			this->idle_timer.start(100);
