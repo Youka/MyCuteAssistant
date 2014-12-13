@@ -17,15 +17,23 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 #include <QtCore/QStringList>
 #include <QtGui/QMovie>
+#include <QtGui/QPixmap>
 
 namespace MCA{
 	class Character{
 		public:
 			static QStringList possibleNames(void);
+			struct Bubble{
+				double x = 0, y = 0;
+				QPixmap pixmap;
+				double edit_x = 0, edit_y = 0;
+				unsigned edit_width = 100, edit_height = 12;
+			};
 			enum class State{IDLE, MOVE};
 		private:
 			QString id, error;
 			QMovie idle, move, null;
+			Bubble m_bubble;
 			State m_state = State::IDLE;
 		public:
 			Character(void) = default;
@@ -35,6 +43,7 @@ namespace MCA{
 			State state(void) const;
 			void state(State current);
 			QMovie& currentImage(void);
+			Bubble& bubble(void);
 			QString errorString(void) const;
 	};
 }

@@ -41,6 +41,14 @@ namespace MCA{
 			this->move.setFileName(char_dir + '/' + properties.value("Images/move", "").toString());
 			if(!this->move.isValid())
 				error_list << "Couldn't load move image!";
+			if(!this->m_bubble.pixmap.load(char_dir + '/' + properties.value("Images/bubble", "").toString()))
+				error_list << "Couldn't load bubble image!";
+			this->m_bubble.x = properties.value("Geometries/bubble_x", this->m_bubble.x).toDouble(),
+			this->m_bubble.y = properties.value("Geometries/bubble_y", this->m_bubble.y).toDouble(),
+			this->m_bubble.edit_x = properties.value("Geometries/bubble_edit_x", this->m_bubble.edit_x).toDouble(),
+			this->m_bubble.edit_y = properties.value("Geometries/bubble_edit_y", this->m_bubble.edit_y).toDouble(),
+			this->m_bubble.edit_width = properties.value("Geometries/bubble_edit_width", this->m_bubble.edit_width).toDouble(),
+			this->m_bubble.edit_height = properties.value("Geometries/bubble_edit_height", this->m_bubble.edit_height).toDouble();
 		}
 		return (this->error = error_list.join(' ')).isEmpty();
 	}
@@ -63,6 +71,10 @@ namespace MCA{
 			case Character::State::MOVE: return this->move;
 		}
 		return this->null;
+	}
+
+	Character::Bubble& Character::bubble(void){
+		return this->m_bubble;
 	}
 
 	QString Character::errorString(void) const{
