@@ -24,6 +24,8 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include <QtWidgets/QLineEdit>
 #include "AboutDialog.hpp"
 #include "config.h"
+#include <QtCore/QCoreApplication>
+#include <QtGui/QMouseEvent>
 
 // External file access
 IMPORT_RESOURCE_FILE(logo_ico)
@@ -37,7 +39,7 @@ IMPORT_RESOURCE_FILE(about_png)
 IMPORT_RESOURCE_FILE(bye_png)
 
 namespace MCA{
-	TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), std::bind(TrayIcon::dbClick, this)){
+	TrayIcon::TrayIcon(AvatarWindow* parent) : QSystemTrayIcon(QICON(logo_ico), parent), hotkey(Config::instance()->hotkey(), std::bind(TrayIcon::activateParent, this)){
 		// Add tray icon menu
 		QMenu* tray_menu = new QMenu(parent);
 		QAction* tray_menu_show_hide = tray_menu->addAction(QICON(show_hide_png), ""),	// Set dynamically (see further down)
@@ -105,7 +107,7 @@ namespace MCA{
 		QLineEdit* hotkey_edit = new QLineEdit(Config::instance()->hotkey());
 		hotkey_edit->setToolTip("Separate keys by '|'. Modifiers: SHIFT,CTRL,ALT.");
 		QObject::connect(hotkey_edit, &QLineEdit::returnPressed, [hotkey_edit,this](void){
-			GlobalHotkey new_hotkey(hotkey_edit->text(), std::bind(TrayIcon::dbClick, this));
+			GlobalHotkey new_hotkey(hotkey_edit->text(), std::bind(TrayIcon::activateParent, this));
 			if(new_hotkey.isOk()){
 				hotkey_edit->selectAll();
 				this->hotkey = std::move(new_hotkey);
@@ -129,8 +131,8 @@ namespace MCA{
 		QObject::connect(this, &QSystemTrayIcon::activated, [parent,tray_menu_show_hide](QSystemTrayIcon::ActivationReason reason){
 			switch(reason){
 				case QSystemTrayIcon::ActivationReason::DoubleClick:
-					if(parent->isVisible())
-						parent->activateWindow();
+					parent->show();
+					parent->setFocus();
 					break;
 				case QSystemTrayIcon::ActivationReason::Context:
 					if(parent->isVisible() && tray_menu_show_hide->text() != "*Crouch*"){
@@ -152,7 +154,9 @@ namespace MCA{
 		this->setToolTip(APP_NAME " v" APP_VERSION_STRING);
 	}
 
-	void TrayIcon::dbClick(void){
+	void TrayIcon::activateParent(void){
 		this->activated(QSystemTrayIcon::ActivationReason::DoubleClick);
+		QMouseEvent event(QEvent::MouseButtonPress, reinterpret_cast<QWidget*>(this->parent())->pos(), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+		QCoreApplication::sendEvent(this->parent(), &event);
 	}
 }

@@ -25,6 +25,6 @@ namespace MCA{
 			GlobalHotkey hotkey;
 		public:
 			TrayIcon(AvatarWindow* parent);
-			void dbClick(void);
+			void activateParent(void);
 	};
 }
