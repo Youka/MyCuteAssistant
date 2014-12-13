@@ -1,6 +1,6 @@
 /*
 Project: MyCuteAssistant
-File: AvatarWindow.hpp
+File: BubbleWindow.cpp
 
 Copyright (c) 2014, Christoph "Youka" Spanknebel
 
@@ -13,28 +13,14 @@ Permission is granted to anyone to use this software for any purpose, including 
 	This notice may not be removed or altered from any source distribution.
 */
 
-#pragma once
-
-#include <QtWidgets/QLabel>
 #include "BubbleWindow.hpp"
-#include <QtCore/QTimer>
 
 namespace MCA{
-	class AvatarWindow : public QLabel{
-		private:
-			BubbleWindow bubble;
-			Character character;
-			QPoint mouse_press_pos;
-			QTimer idle_timer;
-		protected:
-			void closeEvent(QCloseEvent* event) override;
-			void mousePressEvent(QMouseEvent* event) override;
-			void mouseMoveEvent(QMouseEvent* event) override;
-			void mouseReleaseEvent(QMouseEvent* event) override;
-		public:
-			AvatarWindow(void);
-			void loadCharacter(QString name);
-			void loadCharacter(void);
-			void alwaysOnTop(bool on);
-	};
+	BubbleWindow::BubbleWindow(QWidget* parent) : QLabel(parent){
+
+	}
+
+	void BubbleWindow::loadCharacter(Character* character){
+		//this->setPixmap(character->bubble);
+	}
 }

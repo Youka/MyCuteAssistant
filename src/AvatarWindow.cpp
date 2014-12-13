@@ -31,7 +31,7 @@ Permission is granted to anyone to use this software for any purpose, including 
 IMPORT_RESOURCE_FILE(logo_ico)
 
 namespace MCA{
-	AvatarWindow::AvatarWindow(void) : QLabel(nullptr, Qt::Tool|Qt::FramelessWindowHint){
+	AvatarWindow::AvatarWindow(void) : QLabel(nullptr, Qt::Tool|Qt::FramelessWindowHint), bubble(this){
 		// Set window icon (in use by child windows)
 		this->setWindowIcon(QICON(logo_ico));
 		// Set character image
@@ -90,6 +90,8 @@ namespace MCA{
 		}
 		// Set window size to new contents
 		this->adjustSize();
+		// Adjust bubble to avatar changes
+		this->bubble.loadCharacter(&this->character);
 	}
 
 	void AvatarWindow::alwaysOnTop(bool on){
@@ -114,6 +116,9 @@ namespace MCA{
 		if(event->button() == Qt::LeftButton){
 			event->setAccepted(true);
 			this->mouse_press_pos = event->pos();
+		}else if(event->button() == Qt::RightButton){
+			event->setAccepted(true);
+			this->bubble.show();
 		}
 	}
 	void AvatarWindow::mouseMoveEvent(QMouseEvent* event){
