@@ -16,16 +16,16 @@ Permission is granted to anyone to use this software for any purpose, including 
 #pragma once
 
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include "Character.hpp"
 
 namespace MCA{
 	class BubbleWindow : public QLabel{
 		private:
 			QWidget* parent;
+			QLineEdit edit;
 		public:
 			BubbleWindow(QWidget* parent);
 			void show(Character* character);
-		protected:
-			void focusOutEvent(QFocusEvent*) override;
 	};
 }

@@ -132,7 +132,7 @@ namespace MCA{
 			switch(reason){
 				case QSystemTrayIcon::ActivationReason::DoubleClick:
 					parent->show();
-					parent->setFocus();
+					parent->activateWindow();
 					break;
 				case QSystemTrayIcon::ActivationReason::Context:
 					if(parent->isVisible() && tray_menu_show_hide->text() != "*Crouch*"){

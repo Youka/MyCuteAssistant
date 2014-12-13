@@ -48,7 +48,7 @@ namespace MCA{
 		this->setLayout(vbox);
 		// Set dialog properties
 		this->setFocusPolicy(Qt::StrongFocus);	// Needed for focus events
-		this->setFocus();
+		this->activateWindow();
 		this->adjustSize();
 		this->setFixedSize(this->size());
 		QPalette palette = this->palette();
