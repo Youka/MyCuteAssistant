@@ -20,8 +20,12 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 namespace MCA{
 	class BubbleWindow : public QLabel{
+		private:
+			QWidget* parent;
 		public:
 			BubbleWindow(QWidget* parent);
-			void loadCharacter(Character* character);
+			void show(Character* character);
+		protected:
+			void focusOutEvent(QFocusEvent*) override;
 	};
 }

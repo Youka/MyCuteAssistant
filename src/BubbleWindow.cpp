@@ -16,11 +16,22 @@ Permission is granted to anyone to use this software for any purpose, including 
 #include "BubbleWindow.hpp"
 
 namespace MCA{
-	BubbleWindow::BubbleWindow(QWidget* parent) : QLabel(parent){
-
+	BubbleWindow::BubbleWindow(QWidget* parent) : QLabel(nullptr, Qt::Popup|Qt::NoDropShadowWindowHint|Qt::FramelessWindowHint), parent(parent){
+		this->setAttribute(Qt::WA_TranslucentBackground);
+		this->setFocusPolicy(Qt::StrongFocus);	// Needed for focus events
 	}
 
-	void BubbleWindow::loadCharacter(Character* character){
-		//this->setPixmap(character->bubble);
+	void BubbleWindow::show(Character* character){
+		Character::Bubble& bubble_info = character->bubble();
+		this->setPixmap(bubble_info.pixmap);
+		this->adjustSize();
+		QRect geometry = this->geometry();
+		geometry.moveBottomRight(QPoint(this->parent->x() + this->parent->width() * bubble_info.x, this->parent->y() + this->parent->height() * bubble_info.y));
+		this->setGeometry(geometry);
+		QLabel::show();
+	}
+
+	void BubbleWindow::focusOutEvent(QFocusEvent*){
+		this->hide();
 	}
 }

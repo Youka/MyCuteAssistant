@@ -90,8 +90,6 @@ namespace MCA{
 		}
 		// Set window size to new contents
 		this->adjustSize();
-		// Adjust bubble to avatar changes
-		this->bubble.loadCharacter(&this->character);
 	}
 
 	void AvatarWindow::alwaysOnTop(bool on){
@@ -118,7 +116,7 @@ namespace MCA{
 			this->mouse_press_pos = event->pos();
 		}else if(event->button() == Qt::RightButton){
 			event->setAccepted(true);
-			this->bubble.show();
+			this->bubble.show(&this->character);
 		}
 	}
 	void AvatarWindow::mouseMoveEvent(QMouseEvent* event){
