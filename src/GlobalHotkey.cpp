@@ -45,7 +45,7 @@ class WinEventFilter : public NativeEventFilter{
 		};
 };
 
-static QAbstractNativeEventFilter* registerHotkey(QStringList keys, int id, std::function<void()> receiver){
+static QAbstractNativeEventFilter* registerHotkey(QStringList keys, int id, std::function<void(void)> receiver){
 	UINT mods = 0, vk = 0;
 	for(QString& key : keys){
 		if(key == "ALT")
@@ -69,7 +69,7 @@ static void unregisterHotkey(int id){
 #endif
 
 static QAtomicInt atom_int;
-GlobalHotkey::GlobalHotkey(QString keys, std::function<void()> receiver) : id(atom_int++),
+GlobalHotkey::GlobalHotkey(QString keys, std::function<void(void)> receiver) : id(atom_int++),
 										filter(registerHotkey(keys.split('|', QString::SkipEmptyParts), this->id, receiver)){
 	if(this->filter)
 		QCoreApplication::instance()->installNativeEventFilter(this->filter);

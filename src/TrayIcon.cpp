@@ -125,7 +125,7 @@ namespace MCA{
 			AboutDialog(parent).exec();
 		});
 		tray_menu->addSeparator();
-		tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close()));
+		tray_menu->addAction(QICON(bye_png), "Bye-bye", parent, SLOT(close(void)));
 		this->setContextMenu(tray_menu);
 		// Set tray icon actions
 		QObject::connect(this, &QSystemTrayIcon::activated, [parent,tray_menu_show_hide](QSystemTrayIcon::ActivationReason reason){
@@ -138,11 +138,11 @@ namespace MCA{
 					if(parent->isVisible() && tray_menu_show_hide->text() != "*Crouch*"){
 						tray_menu_show_hide->setText("*Crouch*");
 						tray_menu_show_hide->disconnect(parent);
-						parent->connect(tray_menu_show_hide, SIGNAL(triggered()), SLOT(hide()));
+						parent->connect(tray_menu_show_hide, SIGNAL(triggered(void)), SLOT(hide(void)));
 					}else if(parent->isHidden() && tray_menu_show_hide->text() != "*Emerge*"){
 						tray_menu_show_hide->setText("*Emerge*");
 						tray_menu_show_hide->disconnect(parent);
-						parent->connect(tray_menu_show_hide, SIGNAL(triggered()), SLOT(show()));
+						parent->connect(tray_menu_show_hide, SIGNAL(triggered(void)), SLOT(show(void)));
 					}
 					break;
 				case QSystemTrayIcon::ActivationReason::Unknown:
