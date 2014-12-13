@@ -22,7 +22,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 namespace MCA{
 	class BubbleWindow : public QLabel{
 		private:
-			QWidget* parent;
 			QLineEdit edit;
 		public:
 			BubbleWindow(QWidget* parent);

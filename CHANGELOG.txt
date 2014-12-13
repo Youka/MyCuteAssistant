@@ -3,7 +3,7 @@ TODO
 General:
 - Speech API
 - draw icons
-- bubble interaction
+- bubble interaction (font, command handler)
 
 Unix:
 - Qt linkage

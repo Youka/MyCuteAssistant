@@ -26,8 +26,7 @@ namespace MCA{
 			struct Bubble{
 				double x = 0, y = 0;
 				QPixmap pixmap;
-				double edit_x = 0, edit_y = 0;
-				unsigned edit_width = 100, edit_height = 12;
+				double edit_x = 0, edit_y = 0, edit_width = 0.5, edit_height = 0.1;
 			};
 			enum class State{IDLE, MOVE};
 		private:
